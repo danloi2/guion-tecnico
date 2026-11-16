@@ -271,26 +271,12 @@ body {
 
 /* Sequence left border color */
 .table-container tbody tr[data-seq] td:first-child {
-  border-left: 3px solid var(--seq-color, var(--accent));
+  border-left: 4px solid var(--seq-color, var(--accent));
 }
 
-/* Sequence separator */
-.table-container tbody tr.seq-start td {
+/* Sequence separator: divisor nítido entre secuencias (a partir de la segunda) */
+.table-container tbody tr.seq-start:not(:first-child) td {
   border-top: 2px solid var(--border-light);
-}
-
-.table-container tbody tr.seq-start td:first-child::before {
-  content: 'SEC ' attr(data-seq-label);
-  position: absolute;
-  top: -0.6rem;
-  left: 0.5rem;
-  font-size: 0.6rem;
-  font-weight: 700;
-  color: var(--seq-color, var(--accent));
-  background: var(--bg);
-  padding: 0 0.4rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
 }
 
 /* Input/select inside table */
@@ -354,6 +340,8 @@ body {
   color: var(--text-muted);
   text-align: center;
   font-size: 0.75rem;
+  vertical-align: middle;
+  padding: 0.5rem 0.2rem;
 }
 
 .btn-delete {
@@ -667,11 +655,7 @@ body {
   .dur-cell { color: #000; font-size: 7.5pt; }
   .row-num { color: #555; }
 
-  .table-container tbody tr.seq-start td { border-top: 2px solid #000; }
-  .table-container tbody tr.seq-start td:first-child::before {
-    color: #000;
-    background: #fff;
-  }
+  .table-container tbody tr.seq-start:not(:first-child) td { border-top: 2px solid #000; }
 
   .col-act { display: none; }
   thead .col-act { display: none; }
@@ -1039,7 +1023,7 @@ function renderTable() {
     cumulative += parseInt(shot.tiempo) || 0;
 
     html += `<tr data-seq="${seq}" data-index="${i}" class="${seqClass}" style="--seq-color:${seqColor}">`;
-    html += `<td class="row-num"${isNewSeq ? ` data-seq-label="${seq}"` : ''}>${i + 1}</td>`;
+    html += `<td class="row-num">${i + 1}</td>`;
     html += `<td><input type="number" data-field="secuencia" value="${shot.secuencia}" min="1" max="300" placeholder="#"></td>`;
     html += `<td><input type="number" data-field="plano" value="${shot.plano}" min="1" max="300" placeholder="#"></td>`;
     html += `<td><input type="number" data-field="tiempo" value="${shot.tiempo}" min="1" max="300" placeholder="s"></td>`;
@@ -1176,9 +1160,6 @@ function updateSeqColors() {
 
     const isNewSeq = seq && seq !== prevSeq;
     row.classList.toggle('seq-start', isNewSeq);
-    const firstTd = row.querySelector('td');
-    if (isNewSeq) firstTd.dataset.seqLabel = seq;
-    else delete firstTd.dataset.seqLabel;
     prevSeq = seq;
   });
 }
