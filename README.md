@@ -50,12 +50,12 @@ Herramienta web diseñada para el **ámbito educativo** que permite a estudiante
 Simplemente abre el fichero en tu navegador:
 
 ```bash
-# Opción 1: doble clic sobre guion-tecnico.html
+# Opción 1: doble clic sobre index.html
 
 # Opción 2: desde terminal
-xdg-open guion-tecnico.html        # Linux
-open guion-tecnico.html             # macOS
-start guion-tecnico.html            # Windows
+xdg-open index.html        # Linux
+open index.html             # macOS
+start index.html            # Windows
 ```
 
 ---
@@ -64,7 +64,7 @@ start guion-tecnico.html            # Windows
 
 ```
 guion-tecnico/
-├── guion-tecnico.html   # 🌐 Aplicación web (fichero único autocontenido)
+├── index.html   # 🌐 Aplicación web (fichero único autocontenido)
 ├── templates/           # 📋 Plantillas originales
 │   └── Gtécnico.xlsx    # 📊 Hoja de cálculo de referencia original
 ├── examples/            # 📁 Ejemplos de prueba
