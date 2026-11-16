@@ -36,6 +36,7 @@ Herramienta web diseñada para el **ámbito educativo** que permite a estudiante
 | ↕️ **Reordenar planos** | Arrastrar y soltar (Drag & Drop nativo) desde el número de plano con recálculo automático |
 | 📊 **Cálculos automáticos** | Duración total, nº de escenas, nº de planos y duración acumulada en tiempo real |
 | 📚 **Panel de referencia** | Cajón lateral con 6 pestañas de información sobre lenguaje audiovisual |
+| 📋 **Ejemplo integrado** | Carga directa de guión técnico de ejemplo (38 planos) en castellano o euskara sin necesidad de descargas |
 | 💾 **Persistencia** | Autoguardado en `localStorage` + exportación/importación JSON |
 | 🌍 **Bilingüe (ES / EU)** | Conmutador instantáneo Castellano / Euskara (interfaz, glosario técnico y desplegables) |
 | 🖨️ **Impresión optimizada** | Hoja de estilos `@media print` en A4 apaisado, limpia y en blanco y negro |
@@ -67,8 +68,9 @@ guion-tecnico/
 ├── index.html   # 🌐 Aplicación web (fichero único autocontenido)
 ├── templates/           # 📋 Plantillas originales
 │   └── Gtécnico.xlsx    # 📊 Hoja de cálculo de referencia original
-├── examples/            # 📁 Ejemplos de prueba
-│   └── ejemplo-guion-tecnico.es.json # 📄 Datos de ejemplo importables
+├── examples/            # 📁 Ejemplos de prueba (también incrustados en la app)
+│   ├── ejemplo-guion-tecnico.es.json # 📄 Datos de ejemplo en castellano
+│   └── ejemplo-guion-tecnico.eu.json # 📄 Datos de ejemplo en euskara
 ├── README.md            # 📖 Este archivo
 ├── AGENTS.md            # 🤖 Instrucciones para agentes IA
 ├── LICENSE              # ⚖️ Licencia Creative Commons CC BY-SA 4.0

@@ -24,6 +24,7 @@ index.html    ← ÚNICO fichero de código
 
 | Sección | Responsabilidad |
 |---|---|
+| `EXAMPLE_DATA` | Datos de ejemplo (38 planos) incrustados en ES y EU para carga instantánea offline y en GitHub Pages |
 | `I18N` | Textos traducidos para la interfaz en Castellano y Euskara (ES / EU) |
 | `OPTIONS` | Datos de validación para desplegables organizados por idioma (`OPTIONS.es`, `OPTIONS.eu`) |
 | `REF_DATA` | Datos de referencia de lenguaje audiovisual organizados por idioma (`REF_DATA.es`, `REF_DATA.eu`) |
@@ -31,7 +32,7 @@ index.html    ← ÚNICO fichero de código
 | `shots[]` | Array de objetos que representa el estado de todos los planos |
 | Funciones de renderizado | `renderTable()`, `updateStats()`, `updateDurations()`, `updateSeqColors()`, `updateStaticUI()` |
 | Funciones de gestión | `addShot()`, `removeShot()`, `newShot()`, `setLanguage()` |
-| Persistencia | `save()`, `loadFromStorage()`, `exportJSON()`, `importJSON()` |
+| Persistencia | `save()`, `loadFromStorage()`, `exportJSON()`, `importJSON()`, `loadExample()` |
 | UI | `toggleDrawer()`, `renderRefTab()`, `showToast()`, `confirmClear()` |
 
 ### Modelo de datos de un plano (shot)
