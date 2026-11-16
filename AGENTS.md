@@ -2,12 +2,12 @@
 
 ## Contexto del proyecto
 
-Este es un proyecto de **fichero único HTML** (Single Page Application autocontenida) para crear guiones técnicos audiovisuales en el ámbito educativo. Todo el código (HTML, CSS, JavaScript) está en un solo archivo: `guion-tecnico.html`.
+Este es un proyecto de **fichero único HTML** (Single Page Application autocontenida) para crear guiones técnicos audiovisuales en el ámbito educativo. Todo el código (HTML, CSS, JavaScript) está en un solo archivo: `index.html`.
 
 ## Arquitectura
 
 ```
-guion-tecnico.html    ← ÚNICO fichero de código
+index.html    ← ÚNICO fichero de código
 ├── <style>           ← CSS completo (reset, layout, componentes, print, responsive)
 ├── <body>            ← HTML semántico (header, toolbar, tabla, drawer, modals)
 └── <script>          ← JavaScript vanilla ES6+ (estado, renderizado, persistencia)
@@ -16,7 +16,7 @@ guion-tecnico.html    ← ÚNICO fichero de código
 ### Principios de diseño
 
 1. **Zero dependencias**: No hay frameworks, librerías externas, CDN ni imports. Todo es vanilla HTML/CSS/JS.
-2. **Fichero único**: Todo el código debe permanecer dentro de `guion-tecnico.html`. No separar en ficheros CSS o JS salvo que el usuario lo pida explícitamente.
+2. **Fichero único**: Todo el código debe permanecer dentro de `index.html`. No separar en ficheros CSS o JS salvo que el usuario lo pida explícitamente.
 3. **Offline-first**: No hacer llamadas de red. No añadir CDNs, Google Fonts ni recursos externos.
 4. **Portabilidad**: El fichero debe poder abrirse con doble clic en cualquier navegador moderno sin servidor.
 
@@ -121,7 +121,7 @@ Al no haber framework de testing, verificar manualmente:
 
 | Fichero | Propósito | Editable |
 |---|---|---|
-| `guion-tecnico.html` | Aplicación web completa | ✅ Fichero principal |
+| `index.html` | Aplicación web completa | ✅ Fichero principal |
 | `templates/Gtécnico.xlsx` | Hoja de cálculo de referencia original | ⚠️ Solo referencia |
 | `examples/ejemplo-guion-tecnico.es.json` | Datos de ejemplo importables en castellano | ✅ |
 | `examples/ejemplo-guion-tecnico.eu.json` | Datos de ejemplo importables en euskara | ✅ |
