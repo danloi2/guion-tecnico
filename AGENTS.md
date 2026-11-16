@@ -24,12 +24,13 @@ guion-tecnico.html    ← ÚNICO fichero de código
 
 | Sección | Responsabilidad |
 |---|---|
-| `OPTIONS` | Datos de validación para los desplegables (encuadre, angulación, movimiento, efecto, transición) |
-| `REF_DATA` | Datos de referencia de lenguaje audiovisual para el panel lateral |
+| `I18N` | Textos traducidos para la interfaz en Castellano y Euskara (ES / EU) |
+| `OPTIONS` | Datos de validación para desplegables organizados por idioma (`OPTIONS.es`, `OPTIONS.eu`) |
+| `REF_DATA` | Datos de referencia de lenguaje audiovisual organizados por idioma (`REF_DATA.es`, `REF_DATA.eu`) |
 | `SEQ_COLORS` | Paleta de colores para diferenciar secuencias visualmente |
 | `shots[]` | Array de objetos que representa el estado de todos los planos |
-| Funciones de renderizado | `renderTable()`, `updateStats()`, `updateDurations()`, `updateSeqColors()` |
-| Funciones de gestión | `addShot()`, `removeShot()`, `newShot()` |
+| Funciones de renderizado | `renderTable()`, `updateStats()`, `updateDurations()`, `updateSeqColors()`, `updateStaticUI()` |
+| Funciones de gestión | `addShot()`, `removeShot()`, `newShot()`, `setLanguage()` |
 | Persistencia | `save()`, `loadFromStorage()`, `exportJSON()`, `importJSON()` |
 | UI | `toggleDrawer()`, `renderRefTab()`, `showToast()`, `confirmClear()` |
 
@@ -122,7 +123,8 @@ Al no haber framework de testing, verificar manualmente:
 |---|---|---|
 | `guion-tecnico.html` | Aplicación web completa | ✅ Fichero principal |
 | `templates/Gtécnico.xlsx` | Hoja de cálculo de referencia original | ⚠️ Solo referencia |
-| `examples/ejemplo-guion-tecnico.json` | Datos de ejemplo importables extraídos del Excel | ✅ |
+| `examples/ejemplo-guion-tecnico.es.json` | Datos de ejemplo importables en castellano | ✅ |
+| `examples/ejemplo-guion-tecnico.eu.json` | Datos de ejemplo importables en euskara | ✅ |
 | `README.md` | Documentación del proyecto | ✅ |
 | `AGENTS.md` | Este fichero — instrucciones para agentes IA | ✅ |
 | `LICENSE` | Licencia Creative Commons CC BY-SA 4.0 | ✅ |

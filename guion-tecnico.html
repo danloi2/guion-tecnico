@@ -107,6 +107,40 @@ body {
   font-size: 0.82rem;
 }
 
+/* Language selector */
+.lang-switch {
+  display: inline-flex;
+  align-items: center;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 2px;
+  gap: 2px;
+}
+
+.lang-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.2rem 0.55rem;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all var(--transition);
+  font-family: inherit;
+  line-height: 1.2;
+}
+
+.lang-btn:hover {
+  color: var(--text);
+}
+
+.lang-btn.active {
+  background: var(--accent);
+  color: #121417;
+}
+
 .header-credits {
   display: flex;
   align-items: center;
@@ -318,7 +352,7 @@ body {
 
 .table-container table {
   width: 100%;
-  min-width: 1600px;
+  min-width: 1850px;
   border-collapse: separate;
   border-spacing: 0;
   font-size: 0.85rem;
@@ -357,10 +391,6 @@ body {
   vertical-align: middle;
 }
 
-.table-container tbody tr:first-child td {
-  padding-top: 0.6rem;
-}
-
 .table-container tbody tr {
   transition: background var(--transition);
 }
@@ -384,6 +414,7 @@ body {
 .table-container select,
 .table-container textarea {
   width: 100%;
+  display: block;
   background: var(--bg);
   border: 1px solid transparent;
   border-radius: 4px;
@@ -392,6 +423,7 @@ body {
   font-size: 0.83rem;
   font-family: inherit;
   transition: border-color var(--transition);
+  box-sizing: border-box;
 }
 
 .table-container input:focus,
@@ -409,14 +441,18 @@ body {
 }
 
 .table-container textarea {
-  resize: vertical;
-  min-height: 3rem;
-  line-height: 1.4;
+  resize: none;
+  min-height: 34px;
+  line-height: 1.35;
+  overflow-y: hidden;
+  box-sizing: border-box;
+  display: block;
 }
 
 .table-container input[type="number"] {
   width: 60px;
   text-align: center;
+  margin: 0 auto;
   -moz-appearance: textfield;
 }
 .table-container input[type="number"]::-webkit-inner-spin-button,
@@ -441,7 +477,42 @@ body {
   text-align: center;
   font-size: 0.75rem;
   vertical-align: middle;
-  padding: 0.5rem 0.2rem;
+  padding: 0.4rem 0.2rem;
+  cursor: grab;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.row-num:active {
+  cursor: grabbing;
+}
+
+.drag-handle {
+  display: inline-block;
+  opacity: 0.35;
+  margin-right: 3px;
+  font-size: 0.9rem;
+  line-height: 1;
+  vertical-align: middle;
+  transition: opacity var(--transition), color var(--transition);
+}
+
+tr:hover .drag-handle {
+  opacity: 1;
+  color: var(--accent);
+}
+
+tr.dragging {
+  opacity: 0.35;
+  background: var(--surface-3) !important;
+}
+
+tr.drag-over-top td {
+  border-top: 3px solid var(--accent) !important;
+}
+
+tr.drag-over-bottom td {
+  border-bottom: 3px solid var(--accent) !important;
 }
 
 .btn-delete {
@@ -460,13 +531,18 @@ body {
 .btn-delete:hover { color: var(--red); background: var(--red-dim); }
 
 /* Column widths */
-.col-num { width: 35px; }
+.col-num { width: 44px; }
 .col-seq { width: 55px; }
 .col-shot { width: 55px; }
-.col-time { width: 65px; }
-.col-desc { min-width: 200px; }
-.col-select { width: 150px; }
-.col-text { min-width: 140px; }
+.col-time { width: 68px; }
+.col-desc { min-width: 220px; }
+.col-encuadre { min-width: 195px; }
+.col-angulacion { min-width: 135px; }
+.col-movimiento { min-width: 180px; }
+.col-efecto { min-width: 220px; }
+.col-transicion { min-width: 200px; }
+.col-select { min-width: 170px; }
+.col-text { min-width: 165px; }
 .col-dur { width: 75px; }
 .col-act { width: 40px; }
 
@@ -668,108 +744,255 @@ body {
 @media print {
   @page {
     size: A4 landscape;
-    margin: 10mm;
+    margin: 8mm 6mm;
+  }
+
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    box-sizing: border-box !important;
   }
 
   body {
-    background: #fff;
-    color: #000;
-    font-size: 8pt;
+    background: #fff !important;
+    color: #000 !important;
+    font-size: 7pt !important;
     height: auto !important;
     overflow: visible !important;
     display: block !important;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
   }
 
   .filmstrip,
   .toolbar,
   .header-actions,
   .badge-version,
+  .drag-handle,
   .btn-delete,
   .drawer-overlay,
   .drawer,
   .toast,
   .confirm-overlay,
   .credit-pill,
-  .empty-state .btn { display: none !important; }
-
-  .credit-author { color: #555; font-size: 7.5pt; }
-  .credit-author strong { color: #000; }
+  .lang-switch,
+  .empty-state,
+  .col-act,
+  thead .col-act { display: none !important; }
 
   .header {
-    background: none;
-    border-bottom: 2px solid #000;
-    padding: 0 0 5mm;
+    background: none !important;
+    border-bottom: 1.5pt solid #000 !important;
+    padding: 0 0 3mm 0 !important;
+    margin-bottom: 2mm !important;
     break-after: avoid;
+    page-break-after: avoid;
   }
 
-  .header-top h1 { color: #000; font-size: 16pt; }
-  .header-top .subtitle { display: none; }
+  .header-top {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    margin-bottom: 2mm !important;
+  }
+
+  .header-top h1 {
+    color: #000 !important;
+    font-size: 13pt !important;
+    margin: 0 !important;
+  }
+
+  .header-top .subtitle { display: none !important; }
+
+  .header-credits {
+    margin-left: auto !important;
+  }
+
+  .credit-author {
+    color: #444 !important;
+    font-size: 7pt !important;
+  }
+  .credit-author strong { color: #000 !important; }
+
+  .project-fields {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 12mm !important;
+    margin-bottom: 2mm !important;
+  }
+
+  .field-group {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: baseline !important;
+    gap: 2mm !important;
+  }
+
+  .field-group label {
+    color: #555 !important;
+    font-size: 6.5pt !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    white-space: nowrap !important;
+  }
 
   .project-fields input,
   .project-fields select {
-    border: none;
-    padding: 0;
-    background: none;
-    color: #000;
-    font-weight: 600;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: none !important;
+    color: #000 !important;
+    font-size: 7.5pt !important;
+    font-weight: 600 !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
   }
 
-  .field-group label { color: #555; }
+  .stats-and-actions {
+    display: block !important;
+  }
 
-  .stat { background: none; border: 1px solid #999; }
-  .stat-value { color: #000; font-size: 11pt; }
-  .stat-label { color: #555; }
+  .stats-bar {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 8mm !important;
+  }
 
+  .stat {
+    background: none !important;
+    border: none !important;
+    padding: 0 !important;
+    display: flex !important;
+    gap: 1.5mm !important;
+    align-items: baseline !important;
+  }
+
+  .stat-icon { display: none !important; }
+
+  .stat-value {
+    color: #000 !important;
+    font-size: 8pt !important;
+    font-weight: 700 !important;
+  }
+
+  .stat-label {
+    color: #555 !important;
+    font-size: 6pt !important;
+    text-transform: uppercase !important;
+  }
+
+  /* Tabla de impresión */
   .table-container {
     overflow: visible !important;
     height: auto !important;
     flex: none !important;
-    padding: 3mm 0;
+    padding: 0 !important;
+    border: none !important;
+    background: none !important;
   }
 
-  .table-container table { min-width: 0; width: 100%; }
+  .table-container table {
+    min-width: 0 !important;
+    width: 100% !important;
+    table-layout: fixed !important;
+    border-collapse: collapse !important;
+  }
+
+  .table-container thead {
+    position: static !important;
+    display: table-header-group !important; /* Cabecera repetida en cada página */
+  }
 
   .table-container thead th {
-    position: static;
+    position: static !important;
     background: #e8e8e8 !important;
-    color: #000;
-    border: 1px solid #999;
-    font-size: 6.5pt;
-    padding: 2mm 1.5mm;
+    color: #000 !important;
+    border: 0.5pt solid #777 !important;
+    font-size: 5.8pt !important;
+    font-weight: 700 !important;
+    padding: 1.5mm 0.8mm !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+    box-shadow: none !important;
+    text-align: left !important;
+    min-width: 0 !important;
+  }
+
+  .table-container tbody {
+    display: table-row-group !important;
+  }
+
+  .table-container tbody tr {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
   }
 
   .table-container tbody td {
-    border: 1px solid #ccc;
-    padding: 1.5mm;
+    border: 0.5pt solid #999 !important;
+    padding: 1mm 0.8mm !important;
+    vertical-align: top !important;
+    min-width: 0 !important;
+    word-break: break-word !important;
+  }
+
+  .table-container tbody tr[data-seq] td:first-child {
+    border-left: 2pt solid #000 !important;
+  }
+
+  .table-container tbody tr.seq-start:not(:first-child) td {
+    border-top: 1.5pt solid #000 !important;
   }
 
   .table-container input,
   .table-container select,
   .table-container textarea {
-    border: none;
-    padding: 0;
-    background: none;
-    color: #000;
-    font-size: 7.5pt;
-    min-height: 0;
-    resize: none;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: none !important;
+    color: #000 !important;
+    font-size: 6.2pt !important;
+    line-height: 1.25 !important;
+    height: auto !important;
+    min-height: 0 !important;
+    resize: none !important;
+    white-space: pre-wrap !important;
+    word-break: break-word !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    display: block !important;
+    box-shadow: none !important;
   }
 
-  .table-container textarea { height: auto; }
-
-  .table-container tbody tr[data-seq] td:first-child {
-    border-left: 2px solid #000;
+  .dur-cell {
+    color: #000 !important;
+    font-size: 6.2pt !important;
+    font-weight: 600 !important;
+    text-align: center !important;
+    padding: 1mm 0.3mm !important;
+    white-space: nowrap !important;
   }
 
-  .dur-cell { color: #000; font-size: 7.5pt; }
-  .row-num { color: #555; }
+  .row-num {
+    color: #333 !important;
+    font-size: 6.2pt !important;
+    font-weight: 700 !important;
+    text-align: center !important;
+    padding: 1mm 0.3mm !important;
+  }
 
-  .table-container tbody tr.seq-start:not(:first-child) td { border-top: 2px solid #000; }
-
-  .col-act { display: none; }
-  thead .col-act { display: none; }
+  /* Reparto proporcional de columnas para A4 apaisado (total 100%) */
+  .col-num { width: 2.5% !important; min-width: 0 !important; }
+  .col-seq { width: 3.5% !important; min-width: 0 !important; }
+  .col-shot { width: 3.5% !important; min-width: 0 !important; }
+  .col-time { width: 4.5% !important; min-width: 0 !important; }
+  .col-desc { width: 17% !important; min-width: 0 !important; }
+  .col-encuadre { width: 9% !important; min-width: 0 !important; }
+  .col-angulacion { width: 7% !important; min-width: 0 !important; }
+  .col-movimiento { width: 7.5% !important; min-width: 0 !important; }
+  .col-text { width: 9% !important; min-width: 0 !important; }
+  .col-efecto { width: 9.5% !important; min-width: 0 !important; }
+  .col-transicion { width: 9% !important; min-width: 0 !important; }
+  .col-dur { width: 4.5% !important; min-width: 0 !important; }
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -798,12 +1021,16 @@ body {
 <header class="header">
   <div class="header-top">
     <div style="display:flex;align-items:center;gap:0.6rem;">
-      <h1>🎬 Guión Técnico</h1>
+      <h1 data-i18n="appTitle">🎬 Guión Técnico</h1>
       <span class="badge-version">v1.0.0</span>
     </div>
-    <span class="subtitle">Planificación de producción audiovisual</span>
+    <span class="subtitle" data-i18n="appSubtitle">Planificación de producción audiovisual</span>
     <div class="header-credits">
-      <span class="credit-author">Realizado por <strong>Daniel Losada</strong></span>
+      <div class="lang-switch" role="group" aria-label="Hizkuntza / Idioma">
+        <button type="button" class="lang-btn active" data-lang="es" onclick="setLanguage('es')">ES</button>
+        <button type="button" class="lang-btn" data-lang="eu" onclick="setLanguage('eu')">EU</button>
+      </div>
+      <span class="credit-author" data-i18n="authorLabel">Realizado por <strong>Daniel Losada</strong></span>
       <a href="https://orcid.org/0000-0003-3842-7694" target="_blank" rel="noopener noreferrer" class="credit-pill pill-orcid" title="ORCID: Daniel Losada (0000-0003-3842-7694)">
         <svg viewBox="0 0 256 256" class="pill-icon" aria-hidden="true">
           <path fill="#A6CE39" d="M256 128c0 70.7-57.3 128-128 128S0 198.7 0 128 57.3 0 128 0s128 57.3 128 128z"/>
@@ -829,17 +1056,17 @@ body {
 
   <div class="project-fields">
     <div class="field-group">
-      <label for="titulo">Título del Vídeo</label>
-      <input type="text" id="titulo" placeholder="Escribe el título del vídeo..." autocomplete="off">
+      <label for="titulo" data-i18n="fieldTitle">Título del Vídeo</label>
+      <input type="text" id="titulo" data-i18n-ph="phTitle" placeholder="Escribe el título del vídeo..." autocomplete="off">
     </div>
     <div class="field-group">
-      <label for="autores">Autores</label>
-      <input type="text" id="autores" placeholder="Autor1, Autor2, Autor3..." autocomplete="off">
+      <label for="autores" data-i18n="fieldAuthors">Autores</label>
+      <input type="text" id="autores" data-i18n-ph="phAuthors" placeholder="Autor1, Autor2, Autor3..." autocomplete="off">
     </div>
     <div class="field-group">
-      <label for="curso">Curso Académico</label>
+      <label for="curso" data-i18n="fieldYear">Curso Académico</label>
       <select id="curso">
-        <option value="">— Seleccionar —</option>
+        <option value="" data-i18n="optSelectYear">— Seleccionar —</option>
         <option value="2025-2026">2025-2026</option>
         <option value="2026-2027">2026-2027</option>
         <option value="2027-2028">2027-2028</option>
@@ -857,32 +1084,32 @@ body {
         <span class="stat-icon">⏱</span>
         <div>
           <div class="stat-value" id="stat-duracion">00:00</div>
-          <div class="stat-label">Duración total</div>
+          <div class="stat-label" data-i18n="statDuration">Duración total</div>
         </div>
       </div>
       <div class="stat">
         <span class="stat-icon">🎬</span>
         <div>
           <div class="stat-value" id="stat-escenas">0</div>
-          <div class="stat-label">Escenas</div>
+          <div class="stat-label" data-i18n="statScenes">Escenas</div>
         </div>
       </div>
       <div class="stat">
         <span class="stat-icon">🎞</span>
         <div>
           <div class="stat-value" id="stat-planos">0</div>
-          <div class="stat-label">Planos</div>
+          <div class="stat-label" data-i18n="statShots">Planos</div>
         </div>
       </div>
     </div>
 
     <div class="header-actions">
-      <button class="btn btn-primary" onclick="addShot()" title="Añadir un nuevo plano al final">➕ Nuevo plano</button>
-      <button class="btn btn-accent" onclick="toggleDrawer()" title="Ver información de referencia">📚 Referencia</button>
-      <button class="btn btn-gold" onclick="exportJSON()" title="Descargar proyecto como archivo JSON">💾 Exportar</button>
-      <button class="btn" onclick="importJSON()" title="Importar proyecto desde archivo JSON">📂 Importar</button>
-      <button class="btn" onclick="window.print()" title="Imprimir el guión técnico">🖨️ Imprimir</button>
-      <button class="btn btn-danger" onclick="confirmClear()" title="Eliminar todos los datos">🗑️ Vaciar todo</button>
+      <button class="btn btn-primary" onclick="addShot()" data-i18n="btnAddShot" data-i18n-title="titleAddShot" title="Añadir un nuevo plano al final">➕ Nuevo plano</button>
+      <button class="btn btn-accent" onclick="toggleDrawer()" data-i18n="btnReference" data-i18n-title="titleReference" title="Ver información de referencia">📚 Referencia</button>
+      <button class="btn btn-gold" onclick="exportJSON()" data-i18n="btnExport" data-i18n-title="titleExport" title="Descargar proyecto como archivo JSON">💾 Exportar</button>
+      <button class="btn" onclick="importJSON()" data-i18n="btnImport" data-i18n-title="titleImport" title="Importar proyecto desde archivo JSON">📂 Importar</button>
+      <button class="btn" onclick="window.print()" data-i18n="btnPrint" data-i18n-title="titlePrint" title="Imprimir el guión técnico">🖨️ Imprimir</button>
+      <button class="btn btn-danger" onclick="confirmClear()" data-i18n="btnClear" data-i18n-title="titleClear" title="Eliminar todos los datos">🗑️ Vaciar todo</button>
     </div>
   </div>
 </header>
@@ -892,20 +1119,20 @@ body {
   <table id="shots-table">
     <thead>
       <tr>
-        <th class="col-num">#</th>
-        <th class="col-seq">Sec.</th>
-        <th class="col-shot">Plano</th>
-        <th class="col-time">Tiempo (s)</th>
-        <th class="col-desc">Descripción</th>
-        <th class="col-select">Encuadre</th>
-        <th class="col-select">Angulación</th>
-        <th class="col-select">Movimiento</th>
-        <th class="col-text">Intertítulos / Rótulos</th>
-        <th class="col-select">Efecto vídeo</th>
-        <th class="col-select">Transición</th>
-        <th class="col-text">Sonido</th>
-        <th class="col-desc">Diálogo</th>
-        <th class="col-dur">Duración</th>
+        <th class="col-num" data-i18n="thNum">#</th>
+        <th class="col-seq" data-i18n="thSeq">Sec.</th>
+        <th class="col-shot" data-i18n="thShot">Plano</th>
+        <th class="col-time" data-i18n="thTime">Tiempo (s)</th>
+        <th class="col-desc" data-i18n="thDesc">Descripción</th>
+        <th class="col-encuadre" data-i18n="thEncuadre">Encuadre</th>
+        <th class="col-angulacion" data-i18n="thAngulacion">Angulación</th>
+        <th class="col-movimiento" data-i18n="thMovimiento">Movimiento</th>
+        <th class="col-text" data-i18n="thIntertitulos">Intertítulos / Rótulos</th>
+        <th class="col-efecto" data-i18n="thEfecto">Efecto vídeo</th>
+        <th class="col-transicion" data-i18n="thTransicion">Transición</th>
+        <th class="col-text" data-i18n="thSonido">Sonido</th>
+        <th class="col-desc" data-i18n="thDialogo">Diálogo</th>
+        <th class="col-dur" data-i18n="thDuration">Duración</th>
         <th class="col-act"></th>
       </tr>
     </thead>
@@ -913,8 +1140,8 @@ body {
   </table>
   <div class="empty-state" id="empty-state">
     <div class="icon">🎬</div>
-    <p>No hay planos todavía. ¡Empieza a construir tu guión técnico!</p>
-    <button class="btn btn-primary" onclick="addShot()">➕ Añadir primer plano</button>
+    <p data-i18n="emptyText">No hay planos todavía. ¡Empieza a construir tu guión técnico!</p>
+    <button class="btn btn-primary" onclick="addShot()" data-i18n="emptyBtn">➕ Añadir primer plano</button>
   </div>
 </div>
 
@@ -922,16 +1149,16 @@ body {
 <div class="drawer-overlay" id="drawer-overlay" onclick="toggleDrawer()"></div>
 <div class="drawer" id="drawer">
   <div class="drawer-header">
-    <h2>📚 Referencia — Lenguaje Audiovisual</h2>
+    <h2 data-i18n="drawerTitle">📚 Referencia — Lenguaje Audiovisual</h2>
     <button class="drawer-close" onclick="toggleDrawer()">✕</button>
   </div>
   <div class="drawer-tabs" id="drawer-tabs">
-    <button class="drawer-tab active" data-tab="conceptos">Conceptos</button>
-    <button class="drawer-tab" data-tab="encuadres">Encuadres</button>
-    <button class="drawer-tab" data-tab="angulaciones">Angulaciones</button>
-    <button class="drawer-tab" data-tab="movimientos">Movimientos</button>
-    <button class="drawer-tab" data-tab="efectos">Efectos</button>
-    <button class="drawer-tab" data-tab="transiciones">Transiciones</button>
+    <button class="drawer-tab active" data-tab="conceptos" data-i18n="tabConceptos">Conceptos</button>
+    <button class="drawer-tab" data-tab="encuadres" data-i18n="tabEncuadres">Encuadres</button>
+    <button class="drawer-tab" data-tab="angulaciones" data-i18n="tabAngulaciones">Angulaciones</button>
+    <button class="drawer-tab" data-tab="movimientos" data-i18n="tabMovimientos">Movimientos</button>
+    <button class="drawer-tab" data-tab="efectos" data-i18n="tabEfectos">Efectos</button>
+    <button class="drawer-tab" data-tab="transiciones" data-i18n="tabTransiciones">Transiciones</button>
   </div>
   <div class="drawer-body" id="drawer-body"></div>
 </div>
@@ -942,10 +1169,10 @@ body {
 <!-- CONFIRM DIALOG -->
 <div class="confirm-overlay" id="confirm-overlay">
   <div class="confirm-box">
-    <p>⚠️ ¿Estás seguro de que quieres eliminar todos los datos?<br><small style="color:var(--text-muted)">Esta acción no se puede deshacer.</small></p>
+    <p data-i18n="confirmMsg">⚠️ ¿Estás seguro de que quieres eliminar todos los datos?<br><small style="color:var(--text-muted)">Esta acción no se puede deshacer.</small></p>
     <div class="confirm-actions">
-      <button class="btn" onclick="closeConfirm()">Cancelar</button>
-      <button class="btn btn-danger" onclick="clearAll()">Sí, vaciar todo</button>
+      <button class="btn" onclick="closeConfirm()" data-i18n="btnCancel">Cancelar</button>
+      <button class="btn btn-danger" onclick="clearAll()" data-i18n="btnConfirmClear">Sí, vaciar todo</button>
     </div>
   </div>
 </div>
@@ -955,141 +1182,410 @@ body {
 
 <script>
 /* ═══════════════════════════════════════════════════════
+   INTERNATIONALIZATION (i18n) — ES / EU
+   ═══════════════════════════════════════════════════════ */
+const I18N = {
+  es: {
+    appTitle: '🎬 Guión Técnico',
+    appSubtitle: 'Planificación de producción audiovisual',
+    authorLabel: 'Realizado por <strong>Daniel Losada</strong>',
+    fieldTitle: 'Título del Vídeo',
+    phTitle: 'Escribe el título del vídeo...',
+    fieldAuthors: 'Autores',
+    phAuthors: 'Autor1, Autor2, Autor3...',
+    fieldYear: 'Curso Académico',
+    optSelectYear: '— Seleccionar —',
+    statDuration: 'Duración total',
+    statScenes: 'Escenas',
+    statShots: 'Planos',
+    btnAddShot: '➕ Nuevo plano',
+    titleAddShot: 'Añadir un nuevo plano al final',
+    btnReference: '📚 Referencia',
+    titleReference: 'Ver información de referencia',
+    btnExport: '💾 Exportar',
+    titleExport: 'Descargar proyecto como archivo JSON',
+    btnImport: '📂 Importar',
+    titleImport: 'Importar proyecto desde archivo JSON',
+    btnPrint: '🖨️ Imprimir',
+    titlePrint: 'Imprimir el guión técnico',
+    btnClear: '🗑️ Vaciar todo',
+    titleClear: 'Eliminar todos los datos',
+    thNum: '#',
+    thSeq: 'Sec.',
+    thShot: 'Plano',
+    thTime: 'Tiempo (s)',
+    thDesc: 'Descripción',
+    thEncuadre: 'Encuadre',
+    thAngulacion: 'Angulación',
+    thMovimiento: 'Movimiento',
+    thIntertitulos: 'Intertítulos / Rótulos',
+    thEfecto: 'Efecto vídeo',
+    thTransicion: 'Transición',
+    thSonido: 'Sonido',
+    thDialogo: 'Diálogo',
+    thDuration: 'Duración',
+    emptyText: 'No hay planos todavía. ¡Empieza a construir tu guión técnico!',
+    emptyBtn: '➕ Añadir primer plano',
+    drawerTitle: '📚 Referencia — Lenguaje Audiovisual',
+    tabConceptos: 'Conceptos',
+    tabEncuadres: 'Encuadres',
+    tabAngulaciones: 'Angulaciones',
+    tabMovimientos: 'Movimientos',
+    tabEfectos: 'Efectos',
+    tabTransiciones: 'Transiciones',
+    confirmMsg: '⚠️ ¿Estás seguro de que quieres eliminar todos los datos?<br><small style="color:var(--text-muted)">Esta acción no se puede deshacer.</small>',
+    btnCancel: 'Cancelar',
+    btnConfirmClear: 'Sí, vaciar todo',
+    toastSaved: '💾 Guardado automáticamente',
+    toastExported: '💾 Proyecto exportado como JSON',
+    toastImportSuccess: '📂 Proyecto importado correctamente',
+    toastImportError: '❌ Error: archivo JSON no válido',
+    toastCleared: '🗑️ Todos los datos han sido eliminados',
+    toastReordered: '↕️ Plano reordenado',
+    rowDragTitle: 'Arrastra para reordenar este plano',
+    btnDeleteShotTitle: 'Eliminar plano',
+    phDesc: 'Describe el plano...',
+    phIntertitulos: 'Títulos, intertítulos...',
+    phSonido: 'Sonido...',
+    phDialogo: 'Diálogos...'
+  },
+  eu: {
+    appTitle: '🎬 Gidoi Teknikoa',
+    appSubtitle: 'Ikus-entzunezko ekoizpenaren plangintza',
+    authorLabel: 'Egilea: <strong>Daniel Losada</strong>',
+    fieldTitle: 'Bideoaren izenburua',
+    phTitle: 'Idatzi bideoaren izenburua...',
+    fieldAuthors: 'Egileak',
+    phAuthors: 'Egilea 1, Egilea 2, Egilea 3...',
+    fieldYear: 'Ikasturtea',
+    optSelectYear: '— Hautatu —',
+    statDuration: 'Iraupen osoa',
+    statScenes: 'Eszenak',
+    statShots: 'Planoak',
+    btnAddShot: '➕ Plano berria',
+    titleAddShot: 'Gehitu plano berri bat amaieran',
+    btnReference: '📚 Erreferentzia',
+    titleReference: 'Ikusi erreferentziazko informazioa',
+    btnExport: '💾 Esportatu',
+    titleExport: 'Deskargatu proiektua JSON fitxategi gisa',
+    btnImport: '📂 Inportatu',
+    titleImport: 'Inportatu proiektua JSON fitxategi batetik',
+    btnPrint: '🖨️ Inprimatu',
+    titlePrint: 'Inprimatu gidoi teknikoa',
+    btnClear: '🗑️ Dena hustu',
+    titleClear: 'Ezabatu datu guztiak',
+    thNum: '#',
+    thSeq: 'Sek.',
+    thShot: 'Planoa',
+    thTime: 'Denbora (s)',
+    thDesc: 'Deskribapena',
+    thEncuadre: 'Enkuadraketa',
+    thAngulacion: 'Angulazioa',
+    thMovimiento: 'Mugimendua',
+    thIntertitulos: 'Azpitituluak / Errotuluak',
+    thEfecto: 'Bideo-efektua',
+    thTransicion: 'Trantsizioa',
+    thSonido: 'Soinua',
+    thDialogo: 'Elkarrizketa',
+    thDuration: 'Iraupena',
+    emptyText: 'Ez dago planorik oraindik. Hasi zure gidoi teknikoa eraikitzen!',
+    emptyBtn: '➕ Gehitu lehen planoa',
+    drawerTitle: '📚 Erreferentzia — Ikus-entzunezko Lengoaia',
+    tabConceptos: 'Kontzeptuak',
+    tabEncuadres: 'Enkuadraketak',
+    tabAngulaciones: 'Angulazioak',
+    tabMovimientos: 'Mugimenduak',
+    tabEfectos: 'Efektuak',
+    tabTransiciones: 'Trantsizioak',
+    confirmMsg: '⚠️ Ziur zaude datu guztiak ezabatu nahi dituzula?<br><small style="color:var(--text-muted)">Ekintza hau ezin da desegin.</small>',
+    btnCancel: 'Utzi',
+    btnConfirmClear: 'Bai, dena hustu',
+    toastSaved: '💾 Automatikoki gordeta',
+    toastExported: '💾 Proiektua JSON gisa esportatuta',
+    toastImportSuccess: '📂 Proiektua ongi inportatu da',
+    toastImportError: '❌ Errorea: JSON fitxategi baliogabea',
+    toastCleared: '🗑️ Datu guztiak ezabatu dira',
+    toastReordered: '↕️ Planoa berrantolatuta',
+    rowDragTitle: 'Arrastatu plano hau berrantolatzeko',
+    btnDeleteShotTitle: 'Ezabatu planoa',
+    phDesc: 'Deskribatu planoa...',
+    phIntertitulos: 'Izenburuak, azpitituluak...',
+    phSonido: 'Soinua...',
+    phDialogo: 'Elkarrizketak...'
+  }
+};
+
+/* ═══════════════════════════════════════════════════════
    VALIDATION DATA (from Excel "Validación" sheet)
    ═══════════════════════════════════════════════════════ */
 const OPTIONS = {
-  encuadre: [
-    'Plano Detalle (PD)',
-    'Primer Plano (PP)',
-    'Plano Medio (PM)',
-    'Plano Americano (PA)',
-    'Plano Completo (PC)',
-    'Plano General (PG)',
-    'Gran Plano General (GPG)'
-  ],
-  angulacion: [
-    'A nivel',
-    'Picado',
-    'Contrapicado',
-    'Cenital',
-    'Nadiral'
-  ],
-  movimiento: [
-    'Fijo',
-    'Travelin',
-    'Paneo',
-    'Tilt',
-    'Steady',
-    'Cámara lenta (Slow motion)'
-  ],
-  efecto: [
-    'Blanco y negro',
-    'Sepia',
-    'Desaturación parcial o total',
-    'Color grading',
-    'Corrección de color',
-    'Grano de película (Film grain)',
-    'Glitch digital',
-    'Viñeteado',
-    'Cámara lenta (Slow motion)',
-    'Cámara rápida (Fast motion)',
-    'Estabilización / Inestabilidad',
-    'Desenfoque (Blur)',
-    'Lens flare',
-    'Deformaciones (warp, bulge)',
-    'Chroma key (pantalla verde)',
-    'Doble exposición / Superposición',
-    'Enfoque selectivo'
-  ],
-  transicion: [
-    'Corte (Cut)',
-    'Fundido a negro (Fade out)',
-    'Fundido desde negro (Fade in)',
-    'Fundido encadenado (Dissolve)',
-    'Cortinilla (Wipe)',
-    'Corte Igualado (Match cut)',
-    'Corte Brusco (Jump Cut)',
-    'Iris cierra (Iris in)',
-    'Iris abre (Iris out)'
-  ]
+  es: {
+    encuadre: [
+      'Plano Detalle (PD)',
+      'Primer Plano (PP)',
+      'Plano Medio (PM)',
+      'Plano Americano (PA)',
+      'Plano Completo (PC)',
+      'Plano General (PG)',
+      'Gran Plano General (GPG)'
+    ],
+    angulacion: [
+      'A nivel',
+      'Picado',
+      'Contrapicado',
+      'Cenital',
+      'Nadiral'
+    ],
+    movimiento: [
+      'Fijo',
+      'Travelin',
+      'Paneo',
+      'Tilt',
+      'Steady',
+      'Cámara lenta (Slow motion)'
+    ],
+    efecto: [
+      'Blanco y negro',
+      'Sepia',
+      'Desaturación parcial o total',
+      'Color grading',
+      'Corrección de color',
+      'Grano de película (Film grain)',
+      'Glitch digital',
+      'Viñeteado',
+      'Cámara lenta (Slow motion)',
+      'Cámara rápida (Fast motion)',
+      'Estabilización / Inestabilidad',
+      'Desenfoque (Blur)',
+      'Lens flare',
+      'Deformaciones (warp, bulge)',
+      'Chroma key (pantalla verde)',
+      'Doble exposición / Superposición',
+      'Enfoque selectivo'
+    ],
+    transicion: [
+      'Corte (Cut)',
+      'Fundido a negro (Fade out)',
+      'Fundido desde negro (Fade in)',
+      'Fundido encadenado (Dissolve)',
+      'Cortinilla (Wipe)',
+      'Corte Igualado (Match cut)',
+      'Corte Brusco (Jump Cut)',
+      'Iris cierra (Iris in)',
+      'Iris abre (Iris out)'
+    ]
+  },
+  eu: {
+    encuadre: [
+      'Plano Xehea (PD)',
+      'Plano Hurbila (PP)',
+      'Plano Ertaina (PM)',
+      'Plano Amerikarra (PA)',
+      'Plano Osoa (PC)',
+      'Plano Orokorra (PG)',
+      'Plano Oso Orokorra (GPG)'
+    ],
+    angulacion: [
+      'Mailan / Begi-lerroan',
+      'Pikatua',
+      'Kontrapikatua',
+      'Zenitala',
+      'Nadizarra'
+    ],
+    movimiento: [
+      'Finkoa',
+      'Travelling-a',
+      'Panorámika',
+      'Tilt-a',
+      'Steadycam',
+      'Kamera motela (Slow motion)'
+    ],
+    efecto: [
+      'Zuri-beltza',
+      'Sepia',
+      'Desaturazio partziala edo osoa',
+      'Kolore-gradazioa (Color grading)',
+      'Kolore-zuzenketa',
+      'Pelikula-alea (Film grain)',
+      'Glitch digitala',
+      'Binetatzea',
+      'Kamera motela (Slow motion)',
+      'Kamera bizkorra (Fast motion)',
+      'Egonkortzea / Ezegonkortasuna',
+      'Desenfokea (Blur)',
+      'Lente-distira (Lens flare)',
+      'Deformazioak (warp, bulge)',
+      'Chroma key (pantaila berdea)',
+      'Esposizio bikoitza / Gainjartzea',
+      'Foku hautakorra'
+    ],
+    transicion: [
+      'Ebaketa (Cut)',
+      'Beltzera urtzea (Fade out)',
+      'Beltzetik urtzea (Fade in)',
+      'Kateatutako urtzea (Dissolve)',
+      'Errezelketa (Wipe)',
+      'Ebaketa Berdindua (Match cut)',
+      'Ebaketa Traketsa (Jump Cut)',
+      'Iris ixtea (Iris in)',
+      'Iris irekitzea (Iris out)'
+    ]
+  }
 };
 
 /* ═══════════════════════════════════════════════════════
    REFERENCE DATA (from Excel "Información" sheet)
    ═══════════════════════════════════════════════════════ */
 const REF_DATA = {
-  conceptos: {
-    intro: '<strong>ESCENA:</strong> Una escena es una unidad narrativa que ocurre en un mismo espacio y tiempo, o que marca un cambio de espacio o tiempo dentro de la historia. Cada escena tiene un inicio y un final claros y transmite un momento específico de la narrativa. Las escenas están formadas por planos, que son las unidades visuales que componen su desarrollo.<br><br><strong>PLANO:</strong> Un plano es la unidad mínima de grabación visual. Define qué se muestra en la pantalla, desde el encuadre hasta el movimiento de la cámara, y permite al espectador percibir detalles, emociones, acciones o el entorno. Varios planos juntos construyen la escena, ofreciendo ritmo, perspectiva y significado a la narrativa cinematográfica.',
-    items: []
+  es: {
+    conceptos: {
+      intro: '<strong>ESCENA:</strong> Una escena es una unidad narrativa que ocurre en un mismo espacio y tiempo, o que marca un cambio de espacio o tiempo dentro de la historia. Cada escena tiene un inicio y un final claros y transmite un momento específico de la narrativa. Las escenas están formadas por planos, que son las unidades visuales que componen su desarrollo.<br><br><strong>PLANO:</strong> Un plano es la unidad mínima de grabación visual. Define qué se muestra en la pantalla, desde el encuadre hasta el movimiento de la cámara, y permite al espectador percibir detalles, emociones, acciones o el entorno. Varios planos juntos construyen la escena, ofreciendo ritmo, perspectiva y significado a la narrativa cinematográfica.',
+      items: []
+    },
+    encuadres: {
+      headers: ['Encuadre', 'Qué es', 'Función narrativa', 'Ejemplo / uso típico'],
+      items: [
+        ['Plano Detalle (PD)', 'Muestra un fragmento específico del sujeto u objeto (mano, ojo, objeto pequeño)', 'Enfatiza emociones, gestos o detalles importantes', 'Primer plano de ojos llorando, dedos sujetando un objeto'],
+        ['Primer Plano (PP)', 'Muestra rostro o parte superior del torso', 'Destaca emociones, expresiones faciales, reacción del personaje', 'Rostro preocupado, diálogo cercano'],
+        ['Plano Medio (PM)', 'Muestra al sujeto desde la cintura hacia arriba', 'Equilibrio entre personaje y entorno; interacción con objetos', 'Persona escribiendo, conversación entre dos personajes'],
+        ['Plano Americano (PA)', 'Muestra al sujeto aproximadamente desde las rodillas hacia arriba', 'Acción corporal visible; permite movimientos y gestos', 'Personaje caminando, apuntando o disparando (western clásico)'],
+        ['Plano Completo (PC)', 'Muestra al sujeto de cuerpo entero', 'Permite ver postura, desplazamiento o relación con espacio cercano', 'Persona caminando en habitación, interacción con otros personajes'],
+        ['Plano General (PG)', 'Muestra al sujeto y el entorno principal', 'Contextualiza la escena, relación con el espacio', 'Aula con todos los estudiantes, persona en parque'],
+        ['Gran Plano General (GPG)', 'Muestra un escenario amplio donde el sujeto es pequeño en relación al espacio', 'Contextualiza, genera sensación de escala o soledad', 'Paisaje urbano, multitud, paisaje natural']
+      ]
+    },
+    angulaciones: {
+      headers: ['Angulación', 'Qué es', 'Función narrativa', 'Ejemplo / uso típico'],
+      items: [
+        ['A nivel', 'Cámara a la altura de los ojos del sujeto', 'Neutralidad, naturalidad, cercanía con el espectador', 'Conversaciones, escenas cotidianas'],
+        ['Picado', 'Cámara por encima del sujeto, mirando hacia abajo', 'Hace que el sujeto se vea pequeño, vulnerable o débil', 'Niño solo, personaje intimidado, escenas de miedo leve'],
+        ['Contrapicado', 'Cámara por debajo del sujeto, mirando hacia arriba', 'Aumenta la autoridad, poder o grandeza del sujeto', 'Líder, villano, héroe imponente'],
+        ['Cenital', 'Cámara totalmente vertical, mirando hacia abajo', 'Visión de conjunto, síntesis espacial, abstracción', 'Mapas, aulas desde arriba, coreografías, planos de multitud'],
+        ['Nadiral', 'Cámara totalmente vertical, mirando hacia arriba desde el suelo', 'Dramático, extraño, sorprendente, monumental', 'Rascacielos, cielos, heroísmo extremo, efecto visual impactante']
+      ]
+    },
+    movimientos: {
+      headers: ['Movimiento', 'Qué es', 'Función narrativa', 'Ejemplo / uso típico'],
+      items: [
+        ['Fijo', 'La cámara no se mueve; permanece estática', 'Neutralidad, permite concentración en la acción o emoción', 'Primer plano de rostro, detalle de manos, objeto estático'],
+        ['Travelin / Dolly', 'La cámara se desplaza físicamente hacia adelante o atrás, siguiendo al sujeto', 'Movimiento dinámico, acompañar acción, acercamiento gradual', 'Personaje caminando por la calle, seguimiento de acción'],
+        ['Paneo', 'La cámara gira horizontalmente desde un punto fijo', 'Seguir acción lateral, mostrar relación espacial', 'Movimiento de grupo, paisaje, personaje que recorre el entorno'],
+        ['Tilt', 'La cámara gira verticalmente desde un punto fijo', 'Mostrar altura, tamaño o enfatizar caída / ascenso', 'Personaje mirando hacia arriba o abajo, edificios, gestos dramáticos']
+      ]
+    },
+    efectos: {
+      headers: ['Efecto', 'Qué es', 'Función estética', 'Ejemplo / uso típico'],
+      items: [
+        ['Blanco y negro', 'Elimina todo el color', 'Nostalgia, dramatismo, atemporalidad', 'Escenas tristes, recuerdos, flashbacks'],
+        ['Sepia', 'Imagen en tonos marrón/antiguo', 'Evocar pasado, historia, archivo', 'Fotografías antiguas, memorias familiares'],
+        ['Desaturación parcial o total', 'Reduce la intensidad del color', 'Frialdad, tristeza, realismo', 'Momentos melancólicos o tensos'],
+        ['Color grading', 'Tratamiento artístico del color', 'Identidad visual, coherencia tonal', 'Cine estilizado, establecer atmósfera'],
+        ['Corrección de color', 'Ajuste técnico del color', 'Uniformidad visual entre planos', 'Igualar iluminación de escenas distintas'],
+        ['Grano de película (Film grain)', 'Textura analógica añadida', 'Realismo, estética retro', 'Estética retro, cine clásico, documental'],
+        ['Glitch digital', 'Distorsión digital', 'Caos, tecnología, error', 'Mensajes de móvil, escenas de tensión tecnológica'],
+        ['Viñeteado', 'Oscurecimiento de bordes', 'Focalización, intimidad', 'Primeros planos emocionales, escenas de concentración'],
+        ['Cámara lenta (Slow motion)', 'Aumento de duración del movimiento', 'Énfasis, emoción, epicidad', 'Caídas, gestos dramáticos, momentos emotivos'],
+        ['Cámara rápida (Fast motion)', 'Compresión temporal', 'Humor, ritmo acelerado', 'Montaje de actividad rápida, escenas cómicas'],
+        ['Estabilización / Inestabilidad', 'Suavizar o agitar la imagen', 'Naturalidad o tensión', 'Perspectiva subjetiva, acción o nerviosismo'],
+        ['Desenfoque (Blur)', 'Pérdida de nitidez', 'Sueño, memoria, subjetividad', 'Escenas de confusión, flashbacks, sueño'],
+        ['Lens flare', 'Destellos por la lente', 'Estética, atmósfera', 'Amaneceres, luz solar directa, momentos poéticos'],
+        ['Deformaciones (warp, bulge)', 'Alterar la forma de la imagen', 'Surrealismo, comedia', 'Efectos cómicos, escenas fantásticas o alucinaciones'],
+        ['Chroma key (pantalla verde)', 'Reemplazo de fondo', 'Crear mundos o efectos VFX', 'Efectos especiales, fondos ficticios, animación'],
+        ['Doble exposición / Superposición', 'Dos imágenes combinadas', 'Simbolismo, poesía visual', 'Recuerdos sobre el presente, sueño y realidad'],
+        ['Enfoque selectivo', 'Mancha el entorno y deja nítido lo principal', 'Enfatizar un sujeto', 'Primeros planos de personajes en ambiente cargado']
+      ]
+    },
+    transiciones: {
+      headers: ['Recurso', 'Qué es', 'Función narrativa', 'Ejemplo / uso típico'],
+      items: [
+        ['Corte (Cut)', 'Cambio directo entre planos', 'Ritmo rápido, continuidad, sorpresa', 'Conversaciones, acción'],
+        ['Fundido a negro', 'Imagen se oscurece hasta negro', 'Fin de escena, pausa, dramatismo', 'Cierre de capítulos'],
+        ['Fundido desde negro', 'Imagen surge desde negro', 'Inicio de escena o secuencia', 'Apertura suave'],
+        ['Fundido encadenado (Dissolve)', 'Una imagen se mezcla con otra', 'Paso del tiempo, transición suave', 'Montajes emotivos'],
+        ['Cortinilla (Wipe)', 'Una imagen desplaza a otra', 'Estilo clásico, dinamismo', 'Cine clásico, Star Wars'],
+        ['Match cut', 'Unión por semejanza visual/acción', 'Elegancia, resonancia simbólica', '2001: Odisea del Espacio'],
+        ['Jump cut', 'Corte dentro de la misma acción', 'Acelerar tiempo, tensión, estilo moderno', 'Nouvelle Vague'],
+        ['Iris in / Iris out', 'Círculo que abre/cierra la escena', 'Enfoque, estilo clásico', 'Cine mudo, cartoons'],
+        ['Congelado (Freeze frame)', 'Imagen que se detiene', 'Enfatizar un momento, cierre', 'Final de Los 400 golpes'],
+        ['Pantalla en negro', 'Corte a negro sin fundido', 'Pausa abrupta, shock', 'Momentos dramáticos'],
+        ['Título o rótulo', 'Texto en pantalla', 'Ubicación, tiempo, capítulos', '"Nueva York, 1980"']
+      ]
+    }
   },
-  encuadres: {
-    headers: ['Encuadre', 'Qué es', 'Función narrativa', 'Ejemplo / uso típico'],
-    items: [
-      ['Plano Detalle (PD)', 'Muestra un fragmento específico del sujeto u objeto (mano, ojo, objeto pequeño)', 'Enfatiza emociones, gestos o detalles importantes', 'Primer plano de ojos llorando, dedos sujetando un objeto'],
-      ['Primer Plano (PP)', 'Muestra rostro o parte superior del torso', 'Destaca emociones, expresiones faciales, reacción del personaje', 'Rostro preocupado, diálogo cercano'],
-      ['Plano Medio (PM)', 'Muestra al sujeto desde la cintura hacia arriba', 'Equilibrio entre personaje y entorno; interacción con objetos', 'Persona escribiendo, conversación entre dos personajes'],
-      ['Plano Americano (PA)', 'Muestra al sujeto aproximadamente desde las rodillas hacia arriba', 'Acción corporal visible; permite movimientos y gestos', 'Personaje caminando, apuntando o disparando (western clásico)'],
-      ['Plano Completo (PC)', 'Muestra al sujeto de cuerpo entero', 'Permite ver postura, desplazamiento o relación con espacio cercano', 'Persona caminando en habitación, interacción con otros personajes'],
-      ['Plano General (PG)', 'Muestra al sujeto y el entorno principal', 'Contextualiza la escena, relación con el espacio', 'Aula con todos los estudiantes, persona en parque'],
-      ['Gran Plano General (GPG)', 'Muestra un escenario amplio donde el sujeto es pequeño en relación al espacio', 'Contextualiza, genera sensación de escala o soledad', 'Paisaje urbano, multitud, paisaje natural']
-    ]
-  },
-  angulaciones: {
-    headers: ['Angulación', 'Qué es', 'Función narrativa', 'Ejemplo / uso típico'],
-    items: [
-      ['A nivel', 'Cámara a la altura de los ojos del sujeto', 'Neutralidad, naturalidad, cercanía con el espectador', 'Conversaciones, escenas cotidianas'],
-      ['Picado', 'Cámara por encima del sujeto, mirando hacia abajo', 'Hace que el sujeto se vea pequeño, vulnerable o débil', 'Niño solo, personaje intimidado, escenas de miedo leve'],
-      ['Contrapicado', 'Cámara por debajo del sujeto, mirando hacia arriba', 'Aumenta la autoridad, poder o grandeza del sujeto', 'Líder, villano, héroe imponente'],
-      ['Cenital', 'Cámara totalmente vertical, mirando hacia abajo', 'Visión de conjunto, síntesis espacial, abstracción', 'Mapas, aulas desde arriba, coreografías, planos de multitud'],
-      ['Nadiral', 'Cámara totalmente vertical, mirando hacia arriba desde el suelo', 'Dramático, extraño, sorprendente, monumental', 'Rascacielos, cielos, heroísmo extremo, efecto visual impactante']
-    ]
-  },
-  movimientos: {
-    headers: ['Movimiento', 'Qué es', 'Función narrativa', 'Ejemplo / uso típico'],
-    items: [
-      ['Fijo', 'La cámara no se mueve; permanece estática', 'Neutralidad, permite concentración en la acción o emoción', 'Primer plano de rostro, detalle de manos, objeto estático'],
-      ['Travelin / Dolly', 'La cámara se desplaza físicamente hacia adelante o atrás, siguiendo al sujeto', 'Movimiento dinámico, acompañar acción, acercamiento gradual', 'Personaje caminando por la calle, seguimiento de acción'],
-      ['Paneo', 'La cámara gira horizontalmente desde un punto fijo', 'Seguir acción lateral, mostrar relación espacial', 'Movimiento de grupo, paisaje, personaje que recorre el entorno'],
-      ['Tilt', 'La cámara gira verticalmente desde un punto fijo', 'Mostrar altura, tamaño o enfatizar caída / ascenso', 'Personaje mirando hacia arriba o abajo, edificios, gestos dramáticos']
-    ]
-  },
-  efectos: {
-    headers: ['Efecto', 'Qué es', 'Función estética', 'Ejemplo / uso típico'],
-    items: [
-      ['Blanco y negro', 'Elimina todo el color', 'Nostalgia, dramatismo, atemporalidad', 'Escenas tristes, recuerdos, flashbacks'],
-      ['Sepia', 'Imagen en tonos marrón/antiguo', 'Evocar pasado, historia, archivo', 'Fotografías antiguas, memorias familiares'],
-      ['Desaturación parcial o total', 'Reduce la intensidad del color', 'Frialdad, tristeza, realismo', 'Momentos melancólicos o tensos'],
-      ['Color grading', 'Tratamiento artístico del color', 'Identidad visual, coherencia tonal', 'Cine estilizado, establecer atmósfera'],
-      ['Corrección de color', 'Ajuste técnico del color', 'Uniformidad visual entre planos', 'Igualar iluminación de escenas distintas'],
-      ['Grano de película (Film grain)', 'Textura analógica añadida', 'Realismo, estética retro', 'Estética retro, cine clásico, documental'],
-      ['Glitch digital', 'Distorsión digital', 'Caos, tecnología, error', 'Mensajes de móvil, escenas de tensión tecnológica'],
-      ['Viñeteado', 'Oscurecimiento de bordes', 'Focalización, intimidad', 'Primeros planos emocionales, escenas de concentración'],
-      ['Cámara lenta (Slow motion)', 'Aumento de duración del movimiento', 'Énfasis, emoción, epicidad', 'Caídas, gestos dramáticos, momentos emotivos'],
-      ['Cámara rápida (Fast motion)', 'Compresión temporal', 'Humor, ritmo acelerado', 'Montaje de actividad rápida, escenas cómicas'],
-      ['Estabilización / Inestabilidad', 'Suavizar o agitar la imagen', 'Naturalidad o tensión', 'Perspectiva subjetiva, acción o nerviosismo'],
-      ['Desenfoque (Blur)', 'Pérdida de nitidez', 'Sueño, memoria, subjetividad', 'Escenas de confusión, flashbacks, sueño'],
-      ['Lens flare', 'Destellos por la lente', 'Estética, atmósfera', 'Amaneceres, luz solar directa, momentos poéticos'],
-      ['Deformaciones (warp, bulge)', 'Alterar la forma de la imagen', 'Surrealismo, comedia', 'Efectos cómicos, escenas fantásticas o alucinaciones'],
-      ['Chroma key (pantalla verde)', 'Reemplazo de fondo', 'Crear mundos o efectos VFX', 'Efectos especiales, fondos ficticios, animación'],
-      ['Doble exposición / Superposición', 'Dos imágenes combinadas', 'Simbolismo, poesía visual', 'Recuerdos sobre el presente, sueño y realidad'],
-      ['Enfoque selectivo', 'Mancha el entorno y deja nítido lo principal', 'Enfatizar un sujeto', 'Primeros planos de personajes en ambiente cargado']
-    ]
-  },
-  transiciones: {
-    headers: ['Recurso', 'Qué es', 'Función narrativa', 'Ejemplo / uso típico'],
-    items: [
-      ['Corte (Cut)', 'Cambio directo entre planos', 'Ritmo rápido, continuidad, sorpresa', 'Conversaciones, acción'],
-      ['Fundido a negro', 'Imagen se oscurece hasta negro', 'Fin de escena, pausa, dramatismo', 'Cierre de capítulos'],
-      ['Fundido desde negro', 'Imagen surge desde negro', 'Inicio de escena o secuencia', 'Apertura suave'],
-      ['Fundido encadenado (Dissolve)', 'Una imagen se mezcla con otra', 'Paso del tiempo, transición suave', 'Montajes emotivos'],
-      ['Cortinilla (Wipe)', 'Una imagen desplaza a otra', 'Estilo clásico, dinamismo', 'Cine clásico, Star Wars'],
-      ['Match cut', 'Unión por semejanza visual/acción', 'Elegancia, resonancia simbólica', '2001: Odisea del Espacio'],
-      ['Jump cut', 'Corte dentro de la misma acción', 'Acelerar tiempo, tensión, estilo moderno', 'Nouvelle Vague'],
-      ['Iris in / Iris out', 'Círculo que abre/cierra la escena', 'Enfoque, estilo clásico', 'Cine mudo, cartoons'],
-      ['Congelado (Freeze frame)', 'Imagen que se detiene', 'Enfatizar un momento, cierre', 'Final de Los 400 golpes'],
-      ['Pantalla en negro', 'Corte a negro sin fundido', 'Pausa abrupta, shock', 'Momentos dramáticos'],
-      ['Título o rótulo', 'Texto en pantalla', 'Ubicación, tiempo, capítulos', '"Nueva York, 1980"']
-    ]
+  eu: {
+    conceptos: {
+      intro: '<strong>ESZENA:</strong> Eszena bat espazio eta denbora berean gertatzen den narrazio-unitatea da, edo istorioaren barruan espazio- edo denbora-aldaketa bat markatzen duena. Eszena bakoitzak hasiera eta amaiera argiak ditu, eta narrazioaren une zehatz bat helarazten du. Eszenak planoek osatzen dituzte, haien garapena eratzen duten ikus-unitateak izanik.<br><br><strong>PLANOA:</strong> Planoa ikus-grabazioko oinarrizko unitate minimoa da. Pantailan zer erakusten den zehazten du, enkuadraketatik hasi eta kameraren mugimendura arte, eta ikusleari xehetasunak, emozioak, ekintzak edo ingurunea hautemateko aukera ematen dio. Hainbat planok batera eszena eraikitzen dute, erritmoa, ikuspegia eta zentzua emanez zinema-narrazioari.',
+      items: []
+    },
+    encuadres: {
+      headers: ['Enkuadraketa', 'Zer da', 'Funtzio narratiboa', 'Adibidea / erabilera arrunta'],
+      items: [
+        ['Plano Xehea (PD)', 'Subjektuaren edo objektuaren zati zehatz bat erakusten du (eskua, begia, objektu txikia)', 'Emozioak, keinuak edo xehetasun garrantzitsuak nabarmentzen ditu', 'Negarrez dauden begien xehetasuna, hatzak objektu bati eusten'],
+        ['Plano Hurbila (PP)', 'Aurpegia edo bularraldearen goiko aldea erakusten du', 'Emozioak, aurpegi-adierazpenak eta pertsonaiaren erreakzioa nabarmentzen ditu', 'Kezkatutako aurpegia, elkarrizketa hurbila'],
+        ['Plano Ertaina (PM)', 'Pertsonaia gerritik gora erakusten du', 'Pertsonaiaren eta ingurunearen arteko oreka; objektuekiko elkarreragina', 'Idazten ari den pertsona, bi pertsonaien arteko elkarrizketa'],
+        ['Plano Amerikarra (PA)', 'Pertsonaia belaunetatik gora erakusten du gutxi gorabehera', 'Gorputz-ekintza ikusgai; mugimenduak eta keinuak ahalbidetzen ditu', 'Pertsonaia oinez, armarekin apuntatzen edo tiro egiten (western klasikoa)'],
+        ['Plano Osoa (PC)', 'Pertsonaia gorputz osoan erakusten du', 'Jarrera, desplazamendua edo inguruko espazioarekiko harremana ikusteko aukera ematen du', 'Gelatik oinez doan pertsona, beste pertsonaiekin elkarreragiten'],
+        ['Plano Orokorra (PG)', 'Pertsonaia eta ingurune nagusia erakusten ditu', 'Eszena testuinguruan kokatzen du, espazioarekiko harremana', 'Ikasgela ikasle guztiekin, pertsona bat parkean'],
+        ['Plano Oso Orokorra (GPG)', 'Pertsonaia espazioarekiko oso txikia den eremu zabal bat erakusten du', 'Testuinguruan kokatu, eskala- edo bakardade-sentsazioa sortzen du', 'Hiri-paisaia, jendetza, paisaia naturala']
+      ]
+    },
+    angulaciones: {
+      headers: ['Angulazioa', 'Zer da', 'Funtzio narratiboa', 'Adibidea / erabilera arrunta'],
+      items: [
+        ['Mailan / Begi-lerroan', 'Kamera pertsonaiaren begien parean', 'Neutraltasuna, naturaltasuna, ikuslearekiko hurbiltasuna', 'Elkarrizketak, eguneroko eszenak'],
+        ['Pikatua', 'Kamera pertsonaiaren gainetik, beherantz begira', 'Pertsonaia txiki, zaurgarri edo ahul agerrarazten du', 'Haurra bakarrik, beldurtutako pertsonaia'],
+        ['Kontrapikatua', 'Kamera pertsonaiaren azpitik, gorantz begira', 'Pertsonaiaren autoritatea, boterea edo handitasuna areagotzen du', 'Liderra, bilaua, heroi itzela'],
+        ['Zenitala', 'Kamera guztiz bertikala, lurrera begira', 'Ikuspegi orokorra, sintesi espaziala, abstrakzioa', 'Mapak, ikasgelak goitik, koreografiak, jendetza-planoak'],
+        ['Nadizarra', 'Kamera guztiz bertikala, lurretik zerurantz begira', 'Dramatikoa, bitxia, harrigarria, monumentala', 'Etxe orratzak, zeruak, muturreko heroismoa']
+      ]
+    },
+    movimientos: {
+      headers: ['Mugimendua', 'Zer da', 'Funtzio narratiboa', 'Adibidea / erabilera arrunta'],
+      items: [
+        ['Finkoa', 'Kamera ez da mugitzen; geldirik dago', 'Neutraltasuna, ekintzan edo emozioan kontzentratzea ahalbidetzen du', 'Aurpegiaren plano hurbila, eskuen xehetasuna, objektu estatikoa'],
+        ['Travelling-a / Dolly', 'Kamera fisikoki mugitzen da aurrera edo atzera, pertsonaiari jarraituz', 'Mugimendu dinamikoa, ekintzari lagundu, hurbiltze mailakatua', 'Pertsonaia kalean zehar oinez, ekintzaren jarraipena'],
+        ['Panorámika', 'Kamera horizontalki biratzen da puntu finko batetik', 'Alboko ekintza jarraitu, espazio-harremana erakutsi', 'Talde-mugimendua, paisaia, ingurunea zeharkatzen duen pertsonaia'],
+        ['Tilt-a', 'Kamera bertikalki biratzen da puntu finko batetik', 'Altuera, tamaina erakutsi edo erorketa / goratzea nabarmendu', 'Pertsonaia gorantz edo beherantz begira, eraikinak, keinu dramatikoak']
+      ]
+    },
+    efectos: {
+      headers: ['Efektua', 'Zer da', 'Funtzio estetikoa', 'Adibidea / erabilera arrunta'],
+      items: [
+        ['Zuri-beltza', 'Kolore guztia kentzen du', 'Nostalgia, dramatismoa, denboragabetasuna', 'Eszena tristeak, oroitzapenak, flashbackak'],
+        ['Sepia', 'Irudia tonu marroi/zaharkituetan', 'Iragana gogora ekarri, historia, artxiboa', 'Argazki zaharrak, familiako memoriak'],
+        ['Desaturazio partziala edo osoa', 'Kolorearen intentsitatea murrizten du', 'Hotza, tristura, errealismoa', 'Une malenkoniatsuak edo tentsiozkoak'],
+        ['Kolore-gradazioa (Color grading)', 'Kolorearen tratamendu artistikoa', 'Nortasun bisuala, tonu-koherentzia', 'Zinema estilizatua, giroa ezarri'],
+        ['Kolore-zuzenketa', 'Kolorearen doikuntza teknikoa', 'Ikus-uniformetasuna planoen artean', 'Eszena desberdinen argiztapena berdindu'],
+        ['Pelikula-alea (Film grain)', 'Ehundura analogiko gehitua', 'Errealismoa, retro estetika', 'Estetika retroa, zinema klasikoa, dokumentala'],
+        ['Glitch digitala', 'Distortsio digitala', 'Kaosa, teknologia, errorea', 'Mugikorreko mezuak, tentsio teknologikoko eszenak'],
+        ['Binetatzea', 'Ertzak iluntzea', 'Fokalizazioa, intimitatea', 'Plano hurbil emozionalak, kontzentrazio-eszenak'],
+        ['Kamera motela (Slow motion)', 'Mugimenduaren iraupena handitzea', 'Enfasia, emozioa, epikotasuna', 'Erorketak, keinu dramatikoak, une hunkigarriak'],
+        ['Kamera bizkorra (Fast motion)', 'Denbora konprimatzea', 'Umorea, erritmo azkarra', 'Jarduera azkarreko muntaia, eszena komikoak'],
+        ['Egonkortzea / Ezegonkortasuna', 'Irudia leuntzea edo astintzea', 'Naturaltasuna edo tentsioa', 'Ikuspegi subjektiboa, ekintza edo urduritasuna'],
+        ['Desenfokea (Blur)', 'Nitidotasun-galera', 'Ametsa, memoria, subjektibotasuna', 'Nahasmendu-eszenak, flashbackak, loak hartzea'],
+        ['Lente-distira (Lens flare)', 'Distirak lentean zehar', 'Estetika, giroa', 'Egunsentiak, eguzki-argi zuzena, une poetikoak'],
+        ['Deformazioak (warp, bulge)', 'Irudiaren forma aldatzea', 'Errealismo magikoa, komedia', 'Efektu komikoak, eszena fantastikoak edo haluzinazioak'],
+        ['Chroma key (pantaila berdea)', 'Atzealdea ordezkatzea', 'Munduak edo VFX efektuak sortzea', 'Efektu bereziak, fikziozko atzealdeak, animazioa'],
+        ['Esposizio bikoitza / Gainjartzea', 'Bi irudi konbinatuta', 'Sinbolismoa, poesia bisuala', 'Gaur egungoaren gaineko oroitzapenak, ametsa eta errealitatea'],
+        ['Foku hautakorra', 'Ingurunea lausotzen du eta nagusia nítido uzten du', 'Subjektu bat nabarmentzea', 'Giro beteko pertsonaien plano hurbilak']
+      ]
+    },
+    transiciones: {
+      headers: ['Baliabidea', 'Zer da', 'Funtzio narratiboa', 'Adibidea / erabilera arrunta'],
+      items: [
+        ['Ebaketa (Cut)', 'Planoen arteko aldaketa zuzena', 'Erritmo bizia, jarraitutasuna, sorpresa', 'Elkarrizketak, ekintza'],
+        ['Beltzera urtzea', 'Irudia ilundu egiten da beltzera iritsi arte', 'Eszenaren amaiera, etenaldia, dramatismoa', 'Kapituluen amaiera'],
+        ['Beltzetik urtzea', 'Irudia beltzetik sortzen da', 'Eszena edo sekuentziaren hasiera', 'Hasiera leuna'],
+        ['Kateatutako urtzea (Dissolve)', 'Irudi bat beste batekin nahasten da', 'Denboraren igarotzea, trantsizio leuna', 'Muntaia emozionalak'],
+        ['Errezelketa (Wipe)', 'Irudi batek bestea lekualdatzen du', 'Estilo klasikoa, dinamismoa', 'Zinema klasikoa, Star Wars'],
+        ['Ebaketa Berdindua (Match cut)', 'Ikus- edo ekintza-antzekotasunez batzea', 'Dotorezia, oihartzun sinbolikoa', '2001: Odisea espazioan'],
+        ['Jump cut', 'Ebaketa ekintza beraren barruan', 'Denbora azkartu, tentsioa, estilo modernoa', 'Nouvelle Vague'],
+        ['Iris in / Iris out', 'Eszena irekitzen/ixteko zirkulua', 'Enfokea, estilo klasikoa', 'Zinema mutua, marrazki bizidunak'],
+        ['Izoztea (Freeze frame)', 'Gelditzen den irudia', 'Une bat nabarmendu, amaiera', '400 kolpeak filmaren amaiera'],
+        ['Pantaila beltza', 'Ebaketa beltzera urtzerik gabe', 'Bapateko etenaldia, shocka', 'Une dramatikoak'],
+        ['Izenburua edo errotulua', 'Testua pantailan', 'Kokapena, denbora, kapituluak', '"New York, 1980"']
+      ]
+    }
   }
 };
 
@@ -1102,8 +1598,63 @@ const SEQ_COLORS = ['#f0c040','#58a6ff','#3fb950','#bc8cff','#f85149','#ff7b72',
    STATE
    ═══════════════════════════════════════════════════════ */
 const STORAGE_KEY = 'guion-tecnico-data';
+const LANG_STORAGE_KEY = 'guion-tecnico-lang';
+let currentLang = 'es';
 let shots = [];
 let autoSaveTimeout = null;
+
+/* ═══════════════════════════════════════════════════════
+   LANGUAGE SWITCHER & UI UPDATES
+   ═══════════════════════════════════════════════════════ */
+function setLanguage(lang) {
+  if (lang !== 'es' && lang !== 'eu') return;
+  currentLang = lang;
+  try { localStorage.setItem(LANG_STORAGE_KEY, lang); } catch (e) {}
+  document.documentElement.lang = lang;
+
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.lang === lang);
+  });
+
+  updateStaticUI();
+  syncShotsLanguage(lang);
+  renderTable();
+
+  const activeTab = document.querySelector('.drawer-tab.active')?.dataset.tab || 'conceptos';
+  renderRefTab(activeTab);
+}
+
+function updateStaticUI() {
+  const dict = I18N[currentLang];
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    if (dict[key]) el.innerHTML = dict[key];
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+    const key = el.dataset.i18nPh;
+    if (dict[key]) el.placeholder = dict[key];
+  });
+  document.querySelectorAll('[data-i18n-title]').forEach(el => {
+    const key = el.dataset.i18nTitle;
+    if (dict[key]) el.title = dict[key];
+  });
+}
+
+function syncShotsLanguage(newLang) {
+  const fields = ['encuadre', 'angulacion', 'movimiento', 'efecto', 'transicion'];
+  shots.forEach(shot => {
+    fields.forEach(f => {
+      const val = shot[f];
+      if (!val) return;
+      const esIdx = OPTIONS.es[f].indexOf(val);
+      const euIdx = OPTIONS.eu[f].indexOf(val);
+      const idx = esIdx !== -1 ? esIdx : euIdx;
+      if (idx !== -1) {
+        shot[f] = OPTIONS[newLang][f][idx];
+      }
+    });
+  });
+}
 
 /* ═══════════════════════════════════════════════════════
    HELPERS
@@ -1117,12 +1668,21 @@ function formatTime(totalSeconds) {
   return `${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
 }
 
-function buildSelect(options, selected, name) {
-  let html = `<select data-field="${name}"><option value="">—</option>`;
-  for (const opt of options) {
-    const sel = opt === selected ? ' selected' : '';
-    html += `<option value="${opt}"${sel}>${opt}</option>`;
+function buildSelect(field, selected) {
+  const opts = OPTIONS[currentLang][field];
+  let html = `<select data-field="${field}"><option value="">—</option>`;
+
+  let selectedIdx = -1;
+  if (selected) {
+    const esIdx = OPTIONS.es[field].indexOf(selected);
+    const euIdx = OPTIONS.eu[field].indexOf(selected);
+    selectedIdx = esIdx !== -1 ? esIdx : euIdx;
   }
+
+  opts.forEach((opt, idx) => {
+    const sel = (idx === selectedIdx) ? ' selected' : '';
+    html += `<option value="${opt}"${sel}>${opt}</option>`;
+  });
   html += '</select>';
   return html;
 }
@@ -1163,27 +1723,36 @@ function renderTable() {
 
     cumulative += parseInt(shot.tiempo) || 0;
 
+    const dict = I18N[currentLang];
     html += `<tr data-seq="${seq}" data-index="${i}" class="${seqClass}" style="--seq-color:${seqColor}">`;
-    html += `<td class="row-num">${i + 1}</td>`;
+    html += `<td class="row-num" title="${dict.rowDragTitle}"><span class="drag-handle">⠿</span>${i + 1}</td>`;
     html += `<td><input type="number" data-field="secuencia" value="${shot.secuencia}" min="1" max="300" placeholder="#"></td>`;
     html += `<td><input type="number" data-field="plano" value="${shot.plano}" min="1" max="300" placeholder="#"></td>`;
     html += `<td><input type="number" data-field="tiempo" value="${shot.tiempo}" min="1" max="300" placeholder="s"></td>`;
-    html += `<td><textarea data-field="descripcion" placeholder="Describe el plano...">${shot.descripcion}</textarea></td>`;
-    html += `<td>${buildSelect(OPTIONS.encuadre, shot.encuadre, 'encuadre')}</td>`;
-    html += `<td>${buildSelect(OPTIONS.angulacion, shot.angulacion, 'angulacion')}</td>`;
-    html += `<td>${buildSelect(OPTIONS.movimiento, shot.movimiento, 'movimiento')}</td>`;
-    html += `<td><input type="text" data-field="intertitulos" value="${escapeHtml(shot.intertitulos)}" placeholder="—"></td>`;
-    html += `<td>${buildSelect(OPTIONS.efecto, shot.efecto, 'efecto')}</td>`;
-    html += `<td>${buildSelect(OPTIONS.transicion, shot.transicion, 'transicion')}</td>`;
-    html += `<td><input type="text" data-field="sonido" value="${escapeHtml(shot.sonido)}" placeholder="Sonido..."></td>`;
-    html += `<td><textarea data-field="dialogo" placeholder="Diálogos...">${shot.dialogo}</textarea></td>`;
+    html += `<td><textarea data-field="descripcion" placeholder="${dict.phDesc}">${escapeHtml(shot.descripcion)}</textarea></td>`;
+    html += `<td>${buildSelect('encuadre', shot.encuadre)}</td>`;
+    html += `<td>${buildSelect('angulacion', shot.angulacion)}</td>`;
+    html += `<td>${buildSelect('movimiento', shot.movimiento)}</td>`;
+    html += `<td><textarea data-field="intertitulos" placeholder="${dict.phIntertitulos}">${escapeHtml(shot.intertitulos)}</textarea></td>`;
+    html += `<td>${buildSelect('efecto', shot.efecto)}</td>`;
+    html += `<td>${buildSelect('transicion', shot.transicion)}</td>`;
+    html += `<td><textarea data-field="sonido" placeholder="${dict.phSonido}">${escapeHtml(shot.sonido)}</textarea></td>`;
+    html += `<td><textarea data-field="dialogo" placeholder="${dict.phDialogo}">${escapeHtml(shot.dialogo)}</textarea></td>`;
     html += `<td class="dur-cell">${formatTime(cumulative)}</td>`;
-    html += `<td><button class="btn-delete" onclick="removeShot(${i})" title="Eliminar plano">✕</button></td>`;
+    html += `<td><button class="btn-delete" onclick="removeShot(${i})" title="${dict.btnDeleteShotTitle}">✕</button></td>`;
     html += `</tr>`;
   });
 
   tbody.innerHTML = html;
+  tbody.querySelectorAll('textarea').forEach(autoResize);
   updateStats();
+}
+
+function autoResize(el) {
+  if (!el || el.tagName !== 'TEXTAREA') return;
+  el.style.height = 'auto';
+  const borderOffset = el.offsetHeight - el.clientHeight;
+  el.style.height = Math.max(34, el.scrollHeight + borderOffset) + 'px';
 }
 
 function escapeHtml(str) {
@@ -1253,6 +1822,9 @@ function removeShot(index) {
    ═══════════════════════════════════════════════════════ */
 document.getElementById('shots-body').addEventListener('input', function(e) {
   const el = e.target;
+  if (el.tagName === 'TEXTAREA') {
+    autoResize(el);
+  }
   const field = el.dataset.field;
   const tr = el.closest('tr');
   if (!field || !tr) return;
@@ -1278,6 +1850,92 @@ document.getElementById('shots-body').addEventListener('change', function(e) {
   if (isNaN(index) || !shots[index]) return;
   shots[index][field] = el.value;
   scheduleSave();
+});
+
+/* ═══════════════════════════════════════════════════════
+   DRAG & DROP ROW REORDERING
+   ═══════════════════════════════════════════════════════ */
+let draggedIndex = null;
+const shotsBody = document.getElementById('shots-body');
+
+shotsBody.addEventListener('mousedown', function(e) {
+  const handle = e.target.closest('.row-num');
+  if (handle) {
+    const tr = handle.closest('tr');
+    if (tr) tr.draggable = true;
+  }
+});
+
+shotsBody.addEventListener('mouseup', function(e) {
+  const tr = e.target.closest('tr');
+  if (tr) tr.draggable = false;
+});
+
+shotsBody.addEventListener('dragstart', function(e) {
+  const tr = e.target.closest('tr');
+  if (!tr) return;
+  draggedIndex = parseInt(tr.dataset.index);
+  tr.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/plain', draggedIndex);
+});
+
+shotsBody.addEventListener('dragover', function(e) {
+  e.preventDefault();
+  const tr = e.target.closest('tr');
+  if (!tr || tr.classList.contains('dragging')) return;
+
+  shotsBody.querySelectorAll('.drag-over-top, .drag-over-bottom').forEach(r => {
+    if (r !== tr) r.classList.remove('drag-over-top', 'drag-over-bottom');
+  });
+
+  const rect = tr.getBoundingClientRect();
+  const isTop = e.clientY < rect.top + rect.height / 2;
+  tr.classList.toggle('drag-over-top', isTop);
+  tr.classList.toggle('drag-over-bottom', !isTop);
+  e.dataTransfer.dropEffect = 'move';
+});
+
+shotsBody.addEventListener('dragleave', function(e) {
+  const tr = e.target.closest('tr');
+  if (tr && !tr.contains(e.relatedTarget)) {
+    tr.classList.remove('drag-over-top', 'drag-over-bottom');
+  }
+});
+
+shotsBody.addEventListener('drop', function(e) {
+  e.preventDefault();
+  const tr = e.target.closest('tr');
+  if (!tr || draggedIndex === null) return;
+
+  let targetIndex = parseInt(tr.dataset.index);
+  if (isNaN(targetIndex) || isNaN(draggedIndex)) return;
+
+  const rect = tr.getBoundingClientRect();
+  const isBottom = e.clientY >= rect.top + rect.height / 2;
+  if (isBottom) {
+    targetIndex++;
+  }
+  if (draggedIndex < targetIndex) {
+    targetIndex--;
+  }
+
+  if (draggedIndex !== targetIndex) {
+    const [moved] = shots.splice(draggedIndex, 1);
+    shots.splice(targetIndex, 0, moved);
+    renderTable();
+    scheduleSave();
+    showToast(I18N[currentLang].toastReordered);
+  }
+});
+
+shotsBody.addEventListener('dragend', function(e) {
+  const tr = e.target.closest('tr');
+  if (tr) tr.draggable = false;
+  shotsBody.querySelectorAll('.drag-over-top, .drag-over-bottom, .dragging').forEach(r => {
+    r.classList.remove('drag-over-top', 'drag-over-bottom', 'dragging');
+  });
+  draggedIndex = null;
 });
 
 function updateDurations() {
@@ -1342,7 +2000,7 @@ function scheduleSave() {
   clearTimeout(autoSaveTimeout);
   autoSaveTimeout = setTimeout(() => {
     save();
-    showToast('💾 Guardado automáticamente');
+    showToast(I18N[currentLang].toastSaved);
   }, 800);
 }
 
@@ -1371,7 +2029,7 @@ function exportJSON() {
   a.download = `${title.replace(/[^a-zA-Z0-9áéíóúñÁÉÍÓÚÑ\s-]/g, '').replace(/\s+/g, '-')}.json`;
   a.click();
   URL.revokeObjectURL(url);
-  showToast('💾 Proyecto exportado como JSON');
+  showToast(I18N[currentLang].toastExported);
 }
 
 function importJSON() {
@@ -1387,9 +2045,9 @@ function handleFileImport(event) {
       const data = JSON.parse(e.target.result);
       setProjectData(data);
       save();
-      showToast('📂 Proyecto importado correctamente');
+      showToast(I18N[currentLang].toastImportSuccess);
     } catch (err) {
-      showToast('❌ Error: archivo JSON no válido');
+      showToast(I18N[currentLang].toastImportError);
     }
   };
   reader.readAsText(file);
@@ -1415,7 +2073,7 @@ function clearAll() {
   shots = [];
   renderTable();
   save();
-  showToast('🗑️ Todos los datos han sido eliminados');
+  showToast(I18N[currentLang].toastCleared);
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -1428,7 +2086,8 @@ function toggleDrawer() {
 
 function renderRefTab(tabName) {
   const body = document.getElementById('drawer-body');
-  const data = REF_DATA[tabName];
+  const langData = REF_DATA[currentLang] || REF_DATA.es;
+  const data = langData[tabName];
   if (!data) { body.innerHTML = ''; return; }
 
   let html = '';
@@ -1492,10 +2151,25 @@ document.addEventListener('keydown', function(e) {
   }
 });
 
+// Auto-resize textareas on window resize
+window.addEventListener('resize', function() {
+  document.querySelectorAll('#shots-body textarea').forEach(autoResize);
+});
+
 /* ═══════════════════════════════════════════════════════
    INIT
    ═══════════════════════════════════════════════════════ */
 (function init() {
+  const savedLang = localStorage.getItem(LANG_STORAGE_KEY);
+  if (savedLang === 'eu' || savedLang === 'es') {
+    currentLang = savedLang;
+  }
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.lang === currentLang);
+  });
+  document.documentElement.lang = currentLang;
+  updateStaticUI();
+
   // Load saved data or start fresh
   if (!loadFromStorage()) {
     renderTable();

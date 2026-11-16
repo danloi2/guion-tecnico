@@ -33,9 +33,11 @@ Herramienta web diseñada para el **ámbito educativo** que permite a estudiante
 | 📝 **Formulario completo** | 13 columnas: secuencia, plano, tiempo, descripción, encuadre, angulación, movimiento, intertítulos, efecto de vídeo, transición, sonido, diálogo y duración acumulada |
 | 📋 **Desplegables validados** | Menús con opciones de lenguaje audiovisual: 7 encuadres, 5 angulaciones, 6 movimientos, 17 efectos, 9 transiciones |
 | ➕ **Filas dinámicas** | Añadir y eliminar planos con auto-incremento de numeración |
+| ↕️ **Reordenar planos** | Arrastrar y soltar (Drag & Drop nativo) desde el número de plano con recálculo automático |
 | 📊 **Cálculos automáticos** | Duración total, nº de escenas, nº de planos y duración acumulada en tiempo real |
 | 📚 **Panel de referencia** | Cajón lateral con 6 pestañas de información sobre lenguaje audiovisual |
 | 💾 **Persistencia** | Autoguardado en `localStorage` + exportación/importación JSON |
+| 🌍 **Bilingüe (ES / EU)** | Conmutador instantáneo Castellano / Euskara (interfaz, glosario técnico y desplegables) |
 | 🖨️ **Impresión optimizada** | Hoja de estilos `@media print` en A4 apaisado, limpia y en blanco y negro |
 | ⌨️ **Atajos de teclado** | `Ctrl+S` guardar, `Ctrl+P` imprimir, `Ctrl+N` nuevo plano |
 | 📱 **Responsive** | Adaptado a pantallas de escritorio, tablet y móvil |
@@ -66,7 +68,7 @@ guion-tecnico/
 ├── templates/           # 📋 Plantillas originales
 │   └── Gtécnico.xlsx    # 📊 Hoja de cálculo de referencia original
 ├── examples/            # 📁 Ejemplos de prueba
-│   └── ejemplo-guion-tecnico.json # 📄 Datos de ejemplo importables
+│   └── ejemplo-guion-tecnico.es.json # 📄 Datos de ejemplo importables
 ├── README.md            # 📖 Este archivo
 ├── AGENTS.md            # 🤖 Instrucciones para agentes IA
 ├── LICENSE              # ⚖️ Licencia Creative Commons CC BY-SA 4.0
@@ -183,10 +185,11 @@ Corte (Cut) · Fundido a negro · Fundido desde negro · Fundido encadenado (Dis
 
 - [ ] Exportar a PDF directamente
 - [ ] Modo claro / oscuro configurable
-- [ ] Arrastrar y soltar para reordenar planos
+- [x] Arrastrar y soltar para reordenar planos (Drag & Drop nativo)
+- [x] Soporte bilingüe Castellano / Euskara (ES / EU)
 - [ ] Importar datos directamente desde ficheros `.xlsx`
 - [ ] Vista previa de storyboard con imágenes
-- [ ] Soporte multiidioma (EN, FR, CA)
+- [ ] Soporte multiidioma adicional (EN, FR, CA, GL)
 - [ ] PWA con Service Worker para instalación
 
 ---
