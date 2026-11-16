@@ -753,7 +753,7 @@ tr.drag-over-bottom td {
     }
 
     @bottom-center {
-      content: "Página " counter(page) " de " counter(pages);
+      content: attr(data-page-prefix) counter(page) attr(data-page-sep) counter(pages);
       font-size: 6.5pt;
       font-weight: 600;
       color: #333;
@@ -1078,10 +1078,6 @@ tr.drag-over-bottom td {
     </div>
     <span class="subtitle" data-i18n="appSubtitle">Planificación de producción audiovisual</span>
     <div class="header-credits">
-      <div class="lang-switch" role="group" aria-label="Hizkuntza / Idioma">
-        <button type="button" class="lang-btn active" data-lang="es" onclick="setLanguage('es')">ES</button>
-        <button type="button" class="lang-btn" data-lang="eu" onclick="setLanguage('eu')">EU</button>
-      </div>
       <span class="credit-author" data-i18n="authorLabel">Realizado por <strong>Daniel Losada</strong></span>
       <a href="https://orcid.org/0000-0003-3842-7694" target="_blank" rel="noopener noreferrer" class="credit-pill pill-orcid" title="ORCID: Daniel Losada (0000-0003-3842-7694)">
         <svg viewBox="0 0 256 256" class="pill-icon" aria-hidden="true">
@@ -1103,6 +1099,10 @@ tr.drag-over-bottom td {
         </svg>
         <span>CC BY-SA 4.0</span>
       </a>
+      <div class="lang-switch" role="group" aria-label="Hizkuntza / Idioma">
+        <button type="button" class="lang-btn active" data-lang="es" onclick="setLanguage('es')">ES</button>
+        <button type="button" class="lang-btn" data-lang="eu" onclick="setLanguage('eu')">EU</button>
+      </div>
     </div>
   </div>
 
@@ -2218,13 +2218,19 @@ window.addEventListener('beforeprint', function() {
   const fecha = now.toLocaleDateString(currentLang === 'eu' ? 'eu-ES' : 'es-ES', {
     day: '2-digit', month: 'short', year: 'numeric'
   });
-  document.documentElement.setAttribute('data-print-title', titulo);
-  document.documentElement.setAttribute('data-print-date', fecha);
+  const pagePrefix = currentLang === 'eu' ? 'Or. ' : 'Pág. ';
+  const pageSep    = currentLang === 'eu' ? ' / '  : ' de ';
+  document.documentElement.setAttribute('data-print-title',  titulo);
+  document.documentElement.setAttribute('data-print-date',   fecha);
+  document.documentElement.setAttribute('data-page-prefix',  pagePrefix);
+  document.documentElement.setAttribute('data-page-sep',     pageSep);
 });
 
 window.addEventListener('afterprint', function() {
   document.documentElement.removeAttribute('data-print-title');
   document.documentElement.removeAttribute('data-print-date');
+  document.documentElement.removeAttribute('data-page-prefix');
+  document.documentElement.removeAttribute('data-page-sep');
 });
 
 /* ═══════════════════════════════════════════════════════
