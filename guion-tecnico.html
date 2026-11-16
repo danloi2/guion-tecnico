@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎬 Guión Técnico</title>
+<style>
+/* ═══════════════════════════════════════════════════════
+   RESET & CUSTOM PROPERTIES
+   ═══════════════════════════════════════════════════════ */
+:root {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --surface-2: #21262d;
+  --surface-3: #2d333b;
+  --border: #30363d;
+  --border-light: #444c56;
+  --text: #e6edf3;
+  --text-muted: #8b949e;
+  --text-dim: #6e7681;
+  --accent: #f0c040;
+  --accent-hover: #f5d060;
+  --accent-dim: rgba(240,192,64,0.15);
+  --red: #f85149;
+  --red-dim: rgba(248,81,73,0.15);
+  --green: #3fb950;
+  --green-dim: rgba(63,185,80,0.15);
+  --blue: #58a6ff;
+  --blue-dim: rgba(88,166,255,0.15);
+  --purple: #bc8cff;
+  --radius: 8px;
+  --radius-lg: 12px;
+  --shadow: 0 2px 8px rgba(0,0,0,0.3);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.5);
+  --transition: 0.2s ease;
+  --seq-colors: #f0c040, #58a6ff, #3fb950, #bc8cff, #f85149, #ff7b72, #79c0ff, #56d364;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+/* ═══════════════════════════════════════════════════════
+   FILM STRIP DECORATION
+   ═══════════════════════════════════════════════════════ */
+.filmstrip {
+  height: 8px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--accent) 0px, var(--accent) 20px,
+    transparent 20px, transparent 28px
+  );
+  opacity: 0.6;
+}
+
+/* ═══════════════════════════════════════════════════════
+   HEADER
+   ═══════════════════════════════════════════════════════ */
+.header {
+  background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 2rem 2rem 1.5rem;
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.header-top h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: -0.5px;
+}
+
+.header-top .subtitle {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-left: auto;
+}
+
+.project-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.field-group { display: flex; flex-direction: column; gap: 0.3rem; }
+.field-group label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+}
+
+.field-group input,
+.field-group select {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.6rem 0.8rem;
+  color: var(--text);
+  font-size: 0.95rem;
+  transition: border-color var(--transition);
+}
+
+.field-group input:focus,
+.field-group select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-dim);
+}
+
+/* Stats */
+.stats-bar {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.stat {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.5rem 1rem;
+}
+
+.stat-icon { font-size: 1.2rem; }
+
+.stat-value {
+  font-size: 1.3rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+/* ═══════════════════════════════════════════════════════
+   TOOLBAR
+   ═══════════════════════════════════════════════════════ */
+.toolbar {
+  display: flex;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+
+.btn:hover { background: var(--surface-3); border-color: var(--border-light); }
+.btn:active { transform: scale(0.97); }
+
+.btn-primary {
+  background: var(--green-dim);
+  border-color: var(--green);
+  color: var(--green);
+}
+.btn-primary:hover { background: var(--green); color: #fff; }
+
+.btn-accent {
+  background: var(--blue-dim);
+  border-color: var(--blue);
+  color: var(--blue);
+}
+.btn-accent:hover { background: var(--blue); color: #fff; }
+
+.btn-danger {
+  background: var(--red-dim);
+  border-color: var(--red);
+  color: var(--red);
+}
+.btn-danger:hover { background: var(--red); color: #fff; }
+
+.btn-gold {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.btn-gold:hover { background: var(--accent); color: #000; }
+
+.toolbar .spacer { flex: 1; }
+
+/* ═══════════════════════════════════════════════════════
+   TABLE
+   ═══════════════════════════════════════════════════════ */
+.table-container {
+  overflow-x: auto;
+  padding: 1rem 2rem 3rem;
+}
+
+.table-container table {
+  width: 100%;
+  min-width: 1600px;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.85rem;
+}
+
+.table-container thead th {
+  position: sticky;
+  top: 52px;
+  background: var(--surface-2);
+  color: var(--accent);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 0.7rem 0.5rem;
+  border-bottom: 2px solid var(--accent);
+  text-align: left;
+  white-space: nowrap;
+  z-index: 50;
+}
+
+.table-container thead th:first-child { border-radius: var(--radius) 0 0 0; }
+.table-container thead th:last-child { border-radius: 0 var(--radius) 0 0; }
+
+.table-container tbody td {
+  padding: 0.3rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  position: relative;
+}
+
+.table-container tbody tr {
+  transition: background var(--transition);
+}
+
+.table-container tbody tr:hover {
+  background: rgba(240,192,64,0.03);
+}
+
+/* Sequence left border color */
+.table-container tbody tr[data-seq] td:first-child {
+  border-left: 3px solid var(--seq-color, var(--accent));
+}
+
+/* Sequence separator */
+.table-container tbody tr.seq-start td {
+  border-top: 2px solid var(--border-light);
+}
+
+.table-container tbody tr.seq-start td:first-child::before {
+  content: 'SEC ' attr(data-seq-label);
+  position: absolute;
+  top: -0.6rem;
+  left: 0.5rem;
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: var(--seq-color, var(--accent));
+  background: var(--bg);
+  padding: 0 0.4rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Input/select inside table */
+.table-container input,
+.table-container select,
+.table-container textarea {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 0.4rem 0.5rem;
+  color: var(--text);
+  font-size: 0.83rem;
+  font-family: inherit;
+  transition: border-color var(--transition);
+}
+
+.table-container input:focus,
+.table-container select:focus,
+.table-container textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: var(--surface);
+}
+
+.table-container input:hover,
+.table-container select:hover,
+.table-container textarea:hover {
+  border-color: var(--border);
+}
+
+.table-container textarea {
+  resize: vertical;
+  min-height: 3rem;
+  line-height: 1.4;
+}
+
+.table-container input[type="number"] {
+  width: 60px;
+  text-align: center;
+  -moz-appearance: textfield;
+}
+.table-container input[type="number"]::-webkit-inner-spin-button,
+.table-container input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+.table-container select { cursor: pointer; }
+
+.dur-cell {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  color: var(--accent);
+  text-align: center;
+  padding: 0.4rem 0.5rem;
+  white-space: nowrap;
+}
+
+.row-num {
+  font-weight: 700;
+  color: var(--text-muted);
+  text-align: center;
+  font-size: 0.75rem;
+}
+
+.btn-delete {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  font-size: 1.1rem;
+  padding: 0.3rem;
+  border-radius: 4px;
+  transition: all var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn-delete:hover { color: var(--red); background: var(--red-dim); }
+
+/* Column widths */
+.col-num { width: 35px; }
+.col-seq { width: 55px; }
+.col-shot { width: 55px; }
+.col-time { width: 65px; }
+.col-desc { min-width: 200px; }
+.col-select { width: 150px; }
+.col-text { min-width: 140px; }
+.col-dur { width: 75px; }
+.col-act { width: 40px; }
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--text-muted);
+}
+.empty-state .icon { font-size: 3rem; margin-bottom: 1rem; }
+.empty-state p { font-size: 1.1rem; margin-bottom: 1.5rem; }
+
+/* ═══════════════════════════════════════════════════════
+   REFERENCE DRAWER
+   ═══════════════════════════════════════════════════════ */
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 998;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.drawer-overlay.open { opacity: 1; pointer-events: all; }
+
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: min(680px, 90vw);
+  height: 100vh;
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  box-shadow: var(--shadow-lg);
+  z-index: 999;
+  transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+}
+.drawer.open { transform: translateX(0); }
+
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.2rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.drawer-header h2 {
+  font-size: 1.1rem;
+  color: var(--accent);
+}
+
+.drawer-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.4rem;
+  cursor: pointer;
+  padding: 0.3rem;
+  border-radius: 4px;
+}
+.drawer-close:hover { color: var(--text); background: var(--surface-2); }
+
+.drawer-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  flex-shrink: 0;
+}
+
+.drawer-tab {
+  padding: 0.7rem 1rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--transition);
+}
+.drawer-tab:hover { color: var(--text); background: var(--surface-2); }
+.drawer-tab.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.drawer-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+}
+
+.ref-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  margin-bottom: 1rem;
+}
+
+.ref-table th {
+  background: var(--surface-2);
+  color: var(--accent);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 0.6rem 0.7rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.ref-table td {
+  padding: 0.6rem 0.7rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  vertical-align: top;
+  line-height: 1.4;
+}
+
+.ref-table tr:hover td { background: var(--surface-2); }
+
+.ref-table td:first-child {
+  font-weight: 600;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.ref-intro {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  margin-bottom: 1.2rem;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+.ref-intro strong { color: var(--accent); }
+
+/* ═══════════════════════════════════════════════════════
+   TOAST
+   ═══════════════════════════════════════════════════════ */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(120px);
+  background: var(--surface-2);
+  border: 1px solid var(--green);
+  color: var(--green);
+  padding: 0.7rem 1.5rem;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  font-weight: 500;
+  z-index: 1000;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-lg);
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* ═══════════════════════════════════════════════════════
+   CONFIRM DIALOG
+   ═══════════════════════════════════════════════════════ */
+.confirm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 1100;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.confirm-overlay.show { display: flex; }
+
+.confirm-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+}
+
+.confirm-box p { margin-bottom: 1.5rem; font-size: 1rem; }
+.confirm-box .confirm-actions { display: flex; gap: 0.8rem; justify-content: center; }
+
+/* ═══════════════════════════════════════════════════════
+   PRINT STYLES
+   ═══════════════════════════════════════════════════════ */
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 10mm;
+  }
+
+  body {
+    background: #fff;
+    color: #000;
+    font-size: 8pt;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .filmstrip,
+  .toolbar,
+  .btn-delete,
+  .drawer-overlay,
+  .drawer,
+  .toast,
+  .confirm-overlay,
+  .empty-state .btn { display: none !important; }
+
+  .header {
+    background: none;
+    border-bottom: 2px solid #000;
+    padding: 0 0 5mm;
+    break-after: avoid;
+  }
+
+  .header-top h1 { color: #000; font-size: 16pt; }
+  .header-top .subtitle { display: none; }
+
+  .project-fields input,
+  .project-fields select {
+    border: none;
+    padding: 0;
+    background: none;
+    color: #000;
+    font-weight: 600;
+  }
+
+  .field-group label { color: #555; }
+
+  .stat { background: none; border: 1px solid #999; }
+  .stat-value { color: #000; font-size: 11pt; }
+  .stat-label { color: #555; }
+
+  .table-container {
+    overflow: visible;
+    padding: 3mm 0;
+  }
+
+  .table-container table { min-width: 0; width: 100%; }
+
+  .table-container thead th {
+    position: static;
+    background: #e8e8e8 !important;
+    color: #000;
+    border: 1px solid #999;
+    font-size: 6.5pt;
+    padding: 2mm 1.5mm;
+  }
+
+  .table-container tbody td {
+    border: 1px solid #ccc;
+    padding: 1.5mm;
+  }
+
+  .table-container input,
+  .table-container select,
+  .table-container textarea {
+    border: none;
+    padding: 0;
+    background: none;
+    color: #000;
+    font-size: 7.5pt;
+    min-height: 0;
+    resize: none;
+  }
+
+  .table-container textarea { height: auto; }
+
+  .table-container tbody tr[data-seq] td:first-child {
+    border-left: 2px solid #000;
+  }
+
+  .dur-cell { color: #000; font-size: 7.5pt; }
+  .row-num { color: #555; }
+
+  .table-container tbody tr.seq-start td { border-top: 2px solid #000; }
+  .table-container tbody tr.seq-start td:first-child::before {
+    color: #000;
+    background: #fff;
+  }
+
+  .col-act { display: none; }
+  thead .col-act { display: none; }
+}
+
+/* ═══════════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .header { padding: 1rem; }
+  .project-fields { grid-template-columns: 1fr; }
+  .stats-bar { flex-direction: column; }
+  .toolbar { padding: 0.8rem 1rem; }
+  .table-container { padding: 0.5rem; }
+  .header-top h1 { font-size: 1.3rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- Film strip top -->
+<div class="filmstrip"></div>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-top">
+    <h1>🎬 Guión Técnico</h1>
+    <span class="subtitle">Planificación de producción audiovisual</span>
+  </div>
+
+  <div class="project-fields">
+    <div class="field-group">
+      <label for="titulo">Título del Vídeo</label>
+      <input type="text" id="titulo" placeholder="Escribe el título del vídeo..." autocomplete="off">
+    </div>
+    <div class="field-group">
+      <label for="autores">Autores</label>
+      <input type="text" id="autores" placeholder="Autor1, Autor2, Autor3..." autocomplete="off">
+    </div>
+    <div class="field-group">
+      <label for="curso">Curso Académico</label>
+      <select id="curso">
+        <option value="">— Seleccionar —</option>
+        <option value="2025-2026">2025-2026</option>
+        <option value="2026-2027">2026-2027</option>
+        <option value="2027-2028">2027-2028</option>
+        <option value="2028-2029">2028-2029</option>
+        <option value="2029-2030">2029-2030</option>
+        <option value="2030-2031">2030-2031</option>
+        <option value="2031-2032">2031-2032</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat">
+      <span class="stat-icon">⏱</span>
+      <div>
+        <div class="stat-value" id="stat-duracion">00:00</div>
+        <div class="stat-label">Duración total</div>
+      </div>
+    </div>
+    <div class="stat">
+      <span class="stat-icon">🎬</span>
+      <div>
+        <div class="stat-value" id="stat-escenas">0</div>
+        <div class="stat-label">Escenas</div>
+      </div>
+    </div>
+    <div class="stat">
+      <span class="stat-icon">🎞</span>
+      <div>
+        <div class="stat-value" id="stat-planos">0</div>
+        <div class="stat-label">Planos</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- TOOLBAR -->
+<div class="toolbar">
+  <button class="btn btn-primary" onclick="addShot()" title="Añadir un nuevo plano al final">➕ Nuevo plano</button>
+  <button class="btn btn-accent" onclick="toggleDrawer()" title="Ver información de referencia">📚 Referencia</button>
+  <div class="spacer"></div>
+  <button class="btn btn-gold" onclick="exportJSON()" title="Descargar proyecto como archivo JSON">💾 Exportar</button>
+  <button class="btn" onclick="importJSON()" title="Importar proyecto desde archivo JSON">📂 Importar</button>
+  <button class="btn" onclick="window.print()" title="Imprimir el guión técnico">🖨️ Imprimir</button>
+  <button class="btn btn-danger" onclick="confirmClear()" title="Eliminar todos los datos">🗑️ Vaciar todo</button>
+</div>
+
+<!-- MAIN TABLE -->
+<div class="table-container">
+  <table id="shots-table">
+    <thead>
+      <tr>
+        <th class="col-num">#</th>
+        <th class="col-seq">Sec.</th>
+        <th class="col-shot">Plano</th>
+        <th class="col-time">Tiempo (s)</th>
+        <th class="col-desc">Descripción</th>
+        <th class="col-select">Encuadre</th>
+        <th class="col-select">Angulación</th>
+        <th class="col-select">Movimiento</th>
+        <th class="col-text">Intertítulos / Rótulos</th>
+        <th class="col-select">Efecto vídeo</th>
+        <th class="col-select">Transición</th>
+        <th class="col-text">Sonido</th>
+        <th class="col-desc">Diálogo</th>
+        <th class="col-dur">Duración</th>
+        <th class="col-act"></th>
+      </tr>
+    </thead>
+    <tbody id="shots-body"></tbody>
+  </table>
+  <div class="empty-state" id="empty-state">
+    <div class="icon">🎬</div>
+    <p>No hay planos todavía. ¡Empieza a construir tu guión técnico!</p>
+    <button class="btn btn-primary" onclick="addShot()">➕ Añadir primer plano</button>
+  </div>
+</div>
+
+<!-- REFERENCE DRAWER -->
+<div class="drawer-overlay" id="drawer-overlay" onclick="toggleDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <h2>📚 Referencia — Lenguaje Audiovisual</h2>
+    <button class="drawer-close" onclick="toggleDrawer()">✕</button>
+  </div>
+  <div class="drawer-tabs" id="drawer-tabs">
+    <button class="drawer-tab active" data-tab="conceptos">Conceptos</button>
+    <button class="drawer-tab" data-tab="encuadres">Encuadres</button>
+    <button class="drawer-tab" data-tab="angulaciones">Angulaciones</button>
+    <button class="drawer-tab" data-tab="movimientos">Movimientos</button>
+    <button class="drawer-tab" data-tab="efectos">Efectos</button>
+    <button class="drawer-tab" data-tab="transiciones">Transiciones</button>
+  </div>
+  <div class="drawer-body" id="drawer-body"></div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- CONFIRM DIALOG -->
+<div class="confirm-overlay" id="confirm-overlay">
+  <div class="confirm-box">
+    <p>⚠️ ¿Estás seguro de que quieres eliminar todos los datos?<br><small style="color:var(--text-muted)">Esta acción no se puede deshacer.</small></p>
+    <div class="confirm-actions">
+      <button class="btn" onclick="closeConfirm()">Cancelar</button>
+      <button class="btn btn-danger" onclick="clearAll()">Sí, vaciar todo</button>
+    </div>
+  </div>
+</div>
+
+<!-- Hidden file input for import -->
+<input type="file" id="file-input" accept=".json" style="display:none" onchange="handleFileImport(event)">
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   VALIDATION DATA (from Excel "Validación" sheet)
+   ═══════════════════════════════════════════════════════ */
+const OPTIONS = {
+  encuadre: [
+    'Plano Detalle (PD)',
+    'Primer Plano (PP)',
+    'Plano Medio (PM)',
+    'Plano Americano (PA)',
+    'Plano Completo (PC)',
+    'Plano General (PG)',
+    'Gran Plano General (GPG)'
+  ],
+  angulacion: [
+    'A nivel',
+    'Picado',
+    'Contrapicado',
+    'Cenital',
+    'Nadiral'
+  ],
+  movimiento: [
+    'Fijo',
+    'Travelin',
+    'Paneo',
+    'Tilt',
+    'Steady',
+    'Cámara lenta (Slow motion)'
+  ],
+  efecto: [
+    'Blanco y negro',
+    'Sepia',
+    'Desaturación parcial o total',
+    'Color grading',
+    'Corrección de color',
+    'Grano de película (Film grain)',
+    'Glitch digital',
+    'Viñeteado',
+    'Cámara lenta (Slow motion)',
+    'Cámara rápida (Fast motion)',
+    'Estabilización / Inestabilidad',
+    'Desenfoque (Blur)',
+    'Lens flare',
+    'Deformaciones (warp, bulge)',
+    'Chroma key (pantalla verde)',
+    'Doble exposición / Superposición',
+    'Enfoque selectivo'
+  ],
+  transicion: [
+    'Corte (Cut)',
+    'Fundido a negro (Fade out)',
+    'Fundido desde negro (Fade in)',
+    'Fundido encadenado (Dissolve)',
+    'Cortinilla (Wipe)',
+    'Corte Igualado (Match cut)',
+    'Corte Brusco (Jump Cut)',
+    'Iris cierra (Iris in)',
+    'Iris abre (Iris out)'
+  ]
+};
+
+/* ═══════════════════════════════════════════════════════
+   REFERENCE DATA (from Excel "Información" sheet)
+   ═══════════════════════════════════════════════════════ */
+const REF_DATA = {
+  conceptos: {
+    intro: '<strong>ESCENA:</strong> Una escena es una unidad narrativa que ocurre en un mismo espacio y tiempo, o que marca un cambio de espacio o tiempo dentro de la historia. Cada escena tiene un inicio y un final claros y transmite un momento específico de la narrativa. Las escenas están formadas por planos, que son las unidades visuales que componen su desarrollo.<br><br><strong>PLANO:</strong> Un plano es la unidad mínima de grabación visual. Define qué se muestra en la pantalla, desde el encuadre hasta el movimiento de la cámara, y permite al espectador percibir detalles, emociones, acciones o el entorno. Varios planos juntos construyen la escena, ofreciendo ritmo, perspectiva y significado a la narrativa cinematográfica.',
+    items: []
+  },
+  encuadres: {
+    headers: ['Encuadre', 'Qué es', 'Función narrativa', 'Ejemplo / uso típico'],
+    items: [
+      ['Plano Detalle (PD)', 'Muestra un fragmento específico del sujeto u objeto (mano, ojo, objeto pequeño)', 'Enfatiza emociones, gestos o detalles importantes', 'Primer plano de ojos llorando, dedos sujetando un objeto'],
+      ['Primer Plano (PP)', 'Muestra rostro o parte superior del torso', 'Destaca emociones, expresiones faciales, reacción del personaje', 'Rostro preocupado, diálogo cercano'],
+      ['Plano Medio (PM)', 'Muestra al sujeto desde la cintura hacia arriba', 'Equilibrio entre personaje y entorno; interacción con objetos', 'Persona escribiendo, conversación entre dos personajes'],
+      ['Plano Americano (PA)', 'Muestra al sujeto aproximadamente desde las rodillas hacia arriba', 'Acción corporal visible; permite movimientos y gestos', 'Personaje caminando, apuntando o disparando (western clásico)'],
+      ['Plano Completo (PC)', 'Muestra al sujeto de cuerpo entero', 'Permite ver postura, desplazamiento o relación con espacio cercano', 'Persona caminando en habitación, interacción con otros personajes'],
+      ['Plano General (PG)', 'Muestra al sujeto y el entorno principal', 'Contextualiza la escena, relación con el espacio', 'Aula con todos los estudiantes, persona en parque'],
+      ['Gran Plano General (GPG)', 'Muestra un escenario amplio donde el sujeto es pequeño en relación al espacio', 'Contextualiza, genera sensación de escala o soledad', 'Paisaje urbano, multitud, paisaje natural']
+    ]
+  },
+  angulaciones: {
+    headers: ['Angulación', 'Qué es', 'Función narrativa', 'Ejemplo / uso típico'],
+    items: [
+      ['A nivel', 'Cámara a la altura de los ojos del sujeto', 'Neutralidad, naturalidad, cercanía con el espectador', 'Conversaciones, escenas cotidianas'],
+      ['Picado', 'Cámara por encima del sujeto, mirando hacia abajo', 'Hace que el sujeto se vea pequeño, vulnerable o débil', 'Niño solo, personaje intimidado, escenas de miedo leve'],
+      ['Contrapicado', 'Cámara por debajo del sujeto, mirando hacia arriba', 'Aumenta la autoridad, poder o grandeza del sujeto', 'Líder, villano, héroe imponente'],
+      ['Cenital', 'Cámara totalmente vertical, mirando hacia abajo', 'Visión de conjunto, síntesis espacial, abstracción', 'Mapas, aulas desde arriba, coreografías, planos de multitud'],
+      ['Nadiral', 'Cámara totalmente vertical, mirando hacia arriba desde el suelo', 'Dramático, extraño, sorprendente, monumental', 'Rascacielos, cielos, heroísmo extremo, efecto visual impactante']
+    ]
+  },
+  movimientos: {
+    headers: ['Movimiento', 'Qué es', 'Función narrativa', 'Ejemplo / uso típico'],
+    items: [
+      ['Fijo', 'La cámara no se mueve; permanece estática', 'Neutralidad, permite concentración en la acción o emoción', 'Primer plano de rostro, detalle de manos, objeto estático'],
+      ['Travelin / Dolly', 'La cámara se desplaza físicamente hacia adelante o atrás, siguiendo al sujeto', 'Movimiento dinámico, acompañar acción, acercamiento gradual', 'Personaje caminando por la calle, seguimiento de acción'],
+      ['Paneo', 'La cámara gira horizontalmente desde un punto fijo', 'Seguir acción lateral, mostrar relación espacial', 'Movimiento de grupo, paisaje, personaje que recorre el entorno'],
+      ['Tilt', 'La cámara gira verticalmente desde un punto fijo', 'Mostrar altura, tamaño o enfatizar caída / ascenso', 'Personaje mirando hacia arriba o abajo, edificios, gestos dramáticos']
+    ]
+  },
+  efectos: {
+    headers: ['Efecto', 'Qué es', 'Función estética', 'Ejemplo / uso típico'],
+    items: [
+      ['Blanco y negro', 'Elimina todo el color', 'Nostalgia, dramatismo, atemporalidad', 'Escenas tristes, recuerdos, flashbacks'],
+      ['Sepia', 'Imagen en tonos marrón/antiguo', 'Evocar pasado, historia, archivo', 'Fotografías antiguas, memorias familiares'],
+      ['Desaturación parcial o total', 'Reduce la intensidad del color', 'Frialdad, tristeza, realismo', 'Momentos melancólicos o tensos'],
+      ['Color grading', 'Tratamiento artístico del color', 'Identidad visual, coherencia tonal', 'Cine estilizado, establecer atmósfera'],
+      ['Corrección de color', 'Ajuste técnico del color', 'Uniformidad visual entre planos', 'Igualar iluminación de escenas distintas'],
+      ['Grano de película (Film grain)', 'Textura analógica añadida', 'Realismo, estética retro', 'Estética retro, cine clásico, documental'],
+      ['Glitch digital', 'Distorsión digital', 'Caos, tecnología, error', 'Mensajes de móvil, escenas de tensión tecnológica'],
+      ['Viñeteado', 'Oscurecimiento de bordes', 'Focalización, intimidad', 'Primeros planos emocionales, escenas de concentración'],
+      ['Cámara lenta (Slow motion)', 'Aumento de duración del movimiento', 'Énfasis, emoción, epicidad', 'Caídas, gestos dramáticos, momentos emotivos'],
+      ['Cámara rápida (Fast motion)', 'Compresión temporal', 'Humor, ritmo acelerado', 'Montaje de actividad rápida, escenas cómicas'],
+      ['Estabilización / Inestabilidad', 'Suavizar o agitar la imagen', 'Naturalidad o tensión', 'Perspectiva subjetiva, acción o nerviosismo'],
+      ['Desenfoque (Blur)', 'Pérdida de nitidez', 'Sueño, memoria, subjetividad', 'Escenas de confusión, flashbacks, sueño'],
+      ['Lens flare', 'Destellos por la lente', 'Estética, atmósfera', 'Amaneceres, luz solar directa, momentos poéticos'],
+      ['Deformaciones (warp, bulge)', 'Alterar la forma de la imagen', 'Surrealismo, comedia', 'Efectos cómicos, escenas fantásticas o alucinaciones'],
+      ['Chroma key (pantalla verde)', 'Reemplazo de fondo', 'Crear mundos o efectos VFX', 'Efectos especiales, fondos ficticios, animación'],
+      ['Doble exposición / Superposición', 'Dos imágenes combinadas', 'Simbolismo, poesía visual', 'Recuerdos sobre el presente, sueño y realidad'],
+      ['Enfoque selectivo', 'Mancha el entorno y deja nítido lo principal', 'Enfatizar un sujeto', 'Primeros planos de personajes en ambiente cargado']
+    ]
+  },
+  transiciones: {
+    headers: ['Recurso', 'Qué es', 'Función narrativa', 'Ejemplo / uso típico'],
+    items: [
+      ['Corte (Cut)', 'Cambio directo entre planos', 'Ritmo rápido, continuidad, sorpresa', 'Conversaciones, acción'],
+      ['Fundido a negro', 'Imagen se oscurece hasta negro', 'Fin de escena, pausa, dramatismo', 'Cierre de capítulos'],
+      ['Fundido desde negro', 'Imagen surge desde negro', 'Inicio de escena o secuencia', 'Apertura suave'],
+      ['Fundido encadenado (Dissolve)', 'Una imagen se mezcla con otra', 'Paso del tiempo, transición suave', 'Montajes emotivos'],
+      ['Cortinilla (Wipe)', 'Una imagen desplaza a otra', 'Estilo clásico, dinamismo', 'Cine clásico, Star Wars'],
+      ['Match cut', 'Unión por semejanza visual/acción', 'Elegancia, resonancia simbólica', '2001: Odisea del Espacio'],
+      ['Jump cut', 'Corte dentro de la misma acción', 'Acelerar tiempo, tensión, estilo moderno', 'Nouvelle Vague'],
+      ['Iris in / Iris out', 'Círculo que abre/cierra la escena', 'Enfoque, estilo clásico', 'Cine mudo, cartoons'],
+      ['Congelado (Freeze frame)', 'Imagen que se detiene', 'Enfatizar un momento, cierre', 'Final de Los 400 golpes'],
+      ['Pantalla en negro', 'Corte a negro sin fundido', 'Pausa abrupta, shock', 'Momentos dramáticos'],
+      ['Título o rótulo', 'Texto en pantalla', 'Ubicación, tiempo, capítulos', '"Nueva York, 1980"']
+    ]
+  }
+};
+
+/* ═══════════════════════════════════════════════════════
+   SEQUENCE COLORS
+   ═══════════════════════════════════════════════════════ */
+const SEQ_COLORS = ['#f0c040','#58a6ff','#3fb950','#bc8cff','#f85149','#ff7b72','#79c0ff','#56d364','#ffa657','#ff9bce'];
+
+/* ═══════════════════════════════════════════════════════
+   STATE
+   ═══════════════════════════════════════════════════════ */
+const STORAGE_KEY = 'guion-tecnico-data';
+let shots = [];
+let autoSaveTimeout = null;
+
+/* ═══════════════════════════════════════════════════════
+   HELPERS
+   ═══════════════════════════════════════════════════════ */
+function formatTime(totalSeconds) {
+  const s = Math.max(0, Math.round(totalSeconds));
+  const h = Math.floor(s / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  const sec = s % 60;
+  if (h > 0) return `${h}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+  return `${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+}
+
+function buildSelect(options, selected, name) {
+  let html = `<select data-field="${name}"><option value="">—</option>`;
+  for (const opt of options) {
+    const sel = opt === selected ? ' selected' : '';
+    html += `<option value="${opt}"${sel}>${opt}</option>`;
+  }
+  html += '</select>';
+  return html;
+}
+
+function showToast(msg, duration = 2000) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), duration);
+}
+
+/* ═══════════════════════════════════════════════════════
+   RENDER TABLE
+   ═══════════════════════════════════════════════════════ */
+function renderTable() {
+  const tbody = document.getElementById('shots-body');
+  const empty = document.getElementById('empty-state');
+
+  if (shots.length === 0) {
+    tbody.innerHTML = '';
+    empty.style.display = '';
+    updateStats();
+    return;
+  }
+
+  empty.style.display = 'none';
+  let html = '';
+  let cumulative = 0;
+  let prevSeq = null;
+
+  shots.forEach((shot, i) => {
+    const seq = shot.secuencia || '';
+    const seqIdx = seq ? ((parseInt(seq) - 1) % SEQ_COLORS.length) : 0;
+    const seqColor = seq ? SEQ_COLORS[seqIdx] : 'var(--border)';
+    const isNewSeq = seq && seq !== prevSeq;
+    const seqClass = isNewSeq ? ' seq-start' : '';
+    prevSeq = seq;
+
+    cumulative += parseInt(shot.tiempo) || 0;
+
+    html += `<tr data-seq="${seq}" data-index="${i}" class="${seqClass}" style="--seq-color:${seqColor}">`;
+    html += `<td class="row-num"${isNewSeq ? ` data-seq-label="${seq}"` : ''}>${i + 1}</td>`;
+    html += `<td><input type="number" data-field="secuencia" value="${shot.secuencia}" min="1" max="300" placeholder="#"></td>`;
+    html += `<td><input type="number" data-field="plano" value="${shot.plano}" min="1" max="300" placeholder="#"></td>`;
+    html += `<td><input type="number" data-field="tiempo" value="${shot.tiempo}" min="1" max="300" placeholder="s"></td>`;
+    html += `<td><textarea data-field="descripcion" placeholder="Describe el plano...">${shot.descripcion}</textarea></td>`;
+    html += `<td>${buildSelect(OPTIONS.encuadre, shot.encuadre, 'encuadre')}</td>`;
+    html += `<td>${buildSelect(OPTIONS.angulacion, shot.angulacion, 'angulacion')}</td>`;
+    html += `<td>${buildSelect(OPTIONS.movimiento, shot.movimiento, 'movimiento')}</td>`;
+    html += `<td><input type="text" data-field="intertitulos" value="${escapeHtml(shot.intertitulos)}" placeholder="—"></td>`;
+    html += `<td>${buildSelect(OPTIONS.efecto, shot.efecto, 'efecto')}</td>`;
+    html += `<td>${buildSelect(OPTIONS.transicion, shot.transicion, 'transicion')}</td>`;
+    html += `<td><input type="text" data-field="sonido" value="${escapeHtml(shot.sonido)}" placeholder="Sonido..."></td>`;
+    html += `<td><textarea data-field="dialogo" placeholder="Diálogos...">${shot.dialogo}</textarea></td>`;
+    html += `<td class="dur-cell">${formatTime(cumulative)}</td>`;
+    html += `<td><button class="btn-delete" onclick="removeShot(${i})" title="Eliminar plano">✕</button></td>`;
+    html += `</tr>`;
+  });
+
+  tbody.innerHTML = html;
+  updateStats();
+}
+
+function escapeHtml(str) {
+  return (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+/* ═══════════════════════════════════════════════════════
+   STATS
+   ═══════════════════════════════════════════════════════ */
+function updateStats() {
+  const totalSec = shots.reduce((sum, s) => sum + (parseInt(s.tiempo) || 0), 0);
+  const scenes = new Set(shots.map(s => s.secuencia).filter(Boolean));
+
+  document.getElementById('stat-duracion').textContent = formatTime(totalSec);
+  document.getElementById('stat-escenas').textContent = scenes.size;
+  document.getElementById('stat-planos').textContent = shots.length;
+}
+
+/* ═══════════════════════════════════════════════════════
+   SHOT MANAGEMENT
+   ═══════════════════════════════════════════════════════ */
+function newShot(data) {
+  return {
+    secuencia: data?.secuencia || '',
+    plano: data?.plano || '',
+    tiempo: data?.tiempo || '',
+    descripcion: data?.descripcion || '',
+    encuadre: data?.encuadre || '',
+    angulacion: data?.angulacion || '',
+    movimiento: data?.movimiento || '',
+    intertitulos: data?.intertitulos || '',
+    efecto: data?.efecto || '',
+    transicion: data?.transicion || '',
+    sonido: data?.sonido || '',
+    dialogo: data?.dialogo || ''
+  };
+}
+
+function addShot(data) {
+  // If no data, try to auto-increment from last shot
+  if (!data && shots.length > 0) {
+    const last = shots[shots.length - 1];
+    data = {
+      secuencia: last.secuencia || '',
+      plano: last.plano ? String(parseInt(last.plano) + 1) : ''
+    };
+  }
+  shots.push(newShot(data));
+  renderTable();
+  scheduleSave();
+  // Scroll to new row
+  setTimeout(() => {
+    const tbody = document.getElementById('shots-body');
+    const lastRow = tbody.lastElementChild;
+    if (lastRow) lastRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 50);
+}
+
+function removeShot(index) {
+  shots.splice(index, 1);
+  renderTable();
+  scheduleSave();
+}
+
+/* ═══════════════════════════════════════════════════════
+   EVENT DELEGATION — capture field changes
+   ═══════════════════════════════════════════════════════ */
+document.getElementById('shots-body').addEventListener('input', function(e) {
+  const el = e.target;
+  const field = el.dataset.field;
+  const tr = el.closest('tr');
+  if (!field || !tr) return;
+  const index = parseInt(tr.dataset.index);
+  if (isNaN(index) || !shots[index]) return;
+  shots[index][field] = el.value;
+
+  // If time, sequence or shot number changed, update stats & re-render durations
+  if (field === 'tiempo' || field === 'secuencia') {
+    updateDurations();
+    updateStats();
+    if (field === 'secuencia') updateSeqColors();
+  }
+  scheduleSave();
+});
+
+document.getElementById('shots-body').addEventListener('change', function(e) {
+  const el = e.target;
+  const field = el.dataset.field;
+  const tr = el.closest('tr');
+  if (!field || !tr) return;
+  const index = parseInt(tr.dataset.index);
+  if (isNaN(index) || !shots[index]) return;
+  shots[index][field] = el.value;
+  scheduleSave();
+});
+
+function updateDurations() {
+  let cumulative = 0;
+  const cells = document.querySelectorAll('#shots-body .dur-cell');
+  shots.forEach((shot, i) => {
+    cumulative += parseInt(shot.tiempo) || 0;
+    if (cells[i]) cells[i].textContent = formatTime(cumulative);
+  });
+}
+
+function updateSeqColors() {
+  const rows = document.querySelectorAll('#shots-body tr');
+  let prevSeq = null;
+  rows.forEach((row, i) => {
+    const seq = shots[i]?.secuencia || '';
+    const seqIdx = seq ? ((parseInt(seq) - 1) % SEQ_COLORS.length) : 0;
+    const seqColor = seq ? SEQ_COLORS[seqIdx] : 'var(--border)';
+    row.style.setProperty('--seq-color', seqColor);
+    row.dataset.seq = seq;
+
+    const isNewSeq = seq && seq !== prevSeq;
+    row.classList.toggle('seq-start', isNewSeq);
+    const firstTd = row.querySelector('td');
+    if (isNewSeq) firstTd.dataset.seqLabel = seq;
+    else delete firstTd.dataset.seqLabel;
+    prevSeq = seq;
+  });
+}
+
+// Header fields auto-save
+['titulo', 'autores', 'curso'].forEach(id => {
+  document.getElementById(id).addEventListener('input', scheduleSave);
+  document.getElementById(id).addEventListener('change', scheduleSave);
+});
+
+/* ═══════════════════════════════════════════════════════
+   PERSISTENCE — localStorage
+   ═══════════════════════════════════════════════════════ */
+function getProjectData() {
+  return {
+    titulo: document.getElementById('titulo').value,
+    autores: document.getElementById('autores').value,
+    curso: document.getElementById('curso').value,
+    shots: shots,
+    savedAt: new Date().toISOString()
+  };
+}
+
+function setProjectData(data) {
+  document.getElementById('titulo').value = data.titulo || '';
+  document.getElementById('autores').value = data.autores || '';
+  document.getElementById('curso').value = data.curso || '';
+  shots = (data.shots || []).map(s => newShot(s));
+  renderTable();
+}
+
+function save() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(getProjectData()));
+  } catch (e) { /* silently fail if storage full */ }
+}
+
+function scheduleSave() {
+  clearTimeout(autoSaveTimeout);
+  autoSaveTimeout = setTimeout(() => {
+    save();
+    showToast('💾 Guardado automáticamente');
+  }, 800);
+}
+
+function loadFromStorage() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const data = JSON.parse(raw);
+      setProjectData(data);
+      return true;
+    }
+  } catch (e) { /* ignore */ }
+  return false;
+}
+
+/* ═══════════════════════════════════════════════════════
+   EXPORT / IMPORT JSON
+   ═══════════════════════════════════════════════════════ */
+function exportJSON() {
+  const data = getProjectData();
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const title = data.titulo || 'guion-tecnico';
+  a.href = url;
+  a.download = `${title.replace(/[^a-zA-Z0-9áéíóúñÁÉÍÓÚÑ\s-]/g, '').replace(/\s+/g, '-')}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('💾 Proyecto exportado como JSON');
+}
+
+function importJSON() {
+  document.getElementById('file-input').click();
+}
+
+function handleFileImport(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      setProjectData(data);
+      save();
+      showToast('📂 Proyecto importado correctamente');
+    } catch (err) {
+      showToast('❌ Error: archivo JSON no válido');
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+/* ═══════════════════════════════════════════════════════
+   CLEAR ALL
+   ═══════════════════════════════════════════════════════ */
+function confirmClear() {
+  document.getElementById('confirm-overlay').classList.add('show');
+}
+
+function closeConfirm() {
+  document.getElementById('confirm-overlay').classList.remove('show');
+}
+
+function clearAll() {
+  closeConfirm();
+  document.getElementById('titulo').value = '';
+  document.getElementById('autores').value = '';
+  document.getElementById('curso').value = '';
+  shots = [];
+  renderTable();
+  save();
+  showToast('🗑️ Todos los datos han sido eliminados');
+}
+
+/* ═══════════════════════════════════════════════════════
+   REFERENCE DRAWER
+   ═══════════════════════════════════════════════════════ */
+function toggleDrawer() {
+  document.getElementById('drawer').classList.toggle('open');
+  document.getElementById('drawer-overlay').classList.toggle('open');
+}
+
+function renderRefTab(tabName) {
+  const body = document.getElementById('drawer-body');
+  const data = REF_DATA[tabName];
+  if (!data) { body.innerHTML = ''; return; }
+
+  let html = '';
+
+  if (data.intro) {
+    html += `<div class="ref-intro">${data.intro}</div>`;
+  }
+
+  if (data.items && data.items.length > 0 && data.headers) {
+    html += '<table class="ref-table"><thead><tr>';
+    data.headers.forEach(h => html += `<th>${h}</th>`);
+    html += '</tr></thead><tbody>';
+    data.items.forEach(row => {
+      html += '<tr>';
+      row.forEach(cell => html += `<td>${cell}</td>`);
+      html += '</tr>';
+    });
+    html += '</tbody></table>';
+  }
+
+  body.innerHTML = html;
+}
+
+// Tab switching
+document.getElementById('drawer-tabs').addEventListener('click', function(e) {
+  const tab = e.target.closest('.drawer-tab');
+  if (!tab) return;
+  document.querySelectorAll('.drawer-tab').forEach(t => t.classList.remove('active'));
+  tab.classList.add('active');
+  renderRefTab(tab.dataset.tab);
+});
+
+// Close drawer with Escape
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    const drawer = document.getElementById('drawer');
+    if (drawer.classList.contains('open')) toggleDrawer();
+    closeConfirm();
+  }
+});
+
+/* ═══════════════════════════════════════════════════════
+   KEYBOARD SHORTCUTS
+   ═══════════════════════════════════════════════════════ */
+document.addEventListener('keydown', function(e) {
+  // Ctrl+P → print
+  if (e.ctrlKey && e.key === 'p') {
+    e.preventDefault();
+    window.print();
+  }
+  // Ctrl+S → save
+  if (e.ctrlKey && e.key === 's') {
+    e.preventDefault();
+    save();
+    showToast('💾 Guardado');
+  }
+  // Ctrl+N → new shot (when not in input)
+  if (e.ctrlKey && e.key === 'n' && !['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)) {
+    e.preventDefault();
+    addShot();
+  }
+});
+
+/* ═══════════════════════════════════════════════════════
+   INIT
+   ═══════════════════════════════════════════════════════ */
+(function init() {
+  // Load saved data or start fresh
+  if (!loadFromStorage()) {
+    renderTable();
+  }
+  // Render first reference tab
+  renderRefTab('conceptos');
+})();
+</script>
+
+</body>
+</html>

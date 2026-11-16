@@ -1,0 +1,105 @@
+# ═══════════════════════════════════════════════════════
+# Guión Técnico — .gitignore
+# ═══════════════════════════════════════════════════════
+
+# ── Sistemas operativos ──────────────────────────────
+
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.directory
+.Trash-*
+
+# ── Editores e IDEs ──────────────────────────────────
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# JetBrains (WebStorm, IntelliJ, etc.)
+.idea/
+*.iml
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim / Neovim
+*.swp
+*.swo
+*.swn
+*.vim
+Session.vim
+.netrwhist
+
+# Emacs
+*~
+\#*\#
+.#*
+
+# ── Node.js (por si se añade tooling en el futuro) ───
+
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# ── Build / Dist ─────────────────────────────────────
+
+dist/
+build/
+out/
+.cache/
+.parcel-cache/
+
+# ── Entornos ─────────────────────────────────────────
+
+.env
+.env.local
+.env.*.local
+
+# ── Ficheros temporales y de respaldo ────────────────
+
+*.tmp
+*.temp
+*.bak
+*.backup
+*.orig
+*.log
+
+# ── Ficheros de datos locales ────────────────────────
+
+# Exportaciones JSON de guiones (datos del usuario)
+*.json
+!examples/*.json
+!package.json
+!tsconfig.json
+
+# Ficheros Excel de trabajo (el original se mantiene)
+~$*.xlsx
+~$*.xls
+.~lock.*#
+
+# ── Archivos comprimidos ─────────────────────────────
+
+*.zip
+*.tar.gz
+*.rar
+*.7z
