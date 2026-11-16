@@ -744,7 +744,26 @@ tr.drag-over-bottom td {
 @media print {
   @page {
     size: A4 landscape;
-    margin: 8mm 6mm;
+    margin: 5mm 4mm 10mm 4mm; /* top right bottom left — más margen abajo para pie */
+
+    @bottom-left {
+      content: attr(data-print-title);
+      font-size: 6pt;
+      color: #666;
+    }
+
+    @bottom-center {
+      content: "Página " counter(page) " de " counter(pages);
+      font-size: 6.5pt;
+      font-weight: 600;
+      color: #333;
+    }
+
+    @bottom-right {
+      content: attr(data-print-date);
+      font-size: 6pt;
+      color: #666;
+    }
   }
 
   * {
@@ -756,7 +775,7 @@ tr.drag-over-bottom td {
   body {
     background: #fff !important;
     color: #000 !important;
-    font-size: 7pt !important;
+    font-size: 7.5pt !important;
     height: auto !important;
     overflow: visible !important;
     display: block !important;
@@ -776,7 +795,9 @@ tr.drag-over-bottom td {
   .lang-switch,
   .empty-state,
   .col-act,
-  thead .col-act { display: none !important; }
+  .col-num,
+  thead .col-act,
+  thead .col-num { display: none !important; }
 
   .header {
     background: none !important;
@@ -907,9 +928,9 @@ tr.drag-over-bottom td {
     background: #e8e8e8 !important;
     color: #000 !important;
     border: 0.5pt solid #777 !important;
-    font-size: 5.8pt !important;
+    font-size: 6.5pt !important;
     font-weight: 700 !important;
-    padding: 1.5mm 0.8mm !important;
+    padding: 1mm 0.6mm !important;
     white-space: normal !important;
     word-break: break-word !important;
     box-shadow: none !important;
@@ -950,8 +971,8 @@ tr.drag-over-bottom td {
     margin: 0 !important;
     background: none !important;
     color: #000 !important;
-    font-size: 6.2pt !important;
-    line-height: 1.25 !important;
+    font-size: 7pt !important;
+    line-height: 1.3 !important;
     height: auto !important;
     min-height: 0 !important;
     resize: none !important;
@@ -989,6 +1010,7 @@ tr.drag-over-bottom td {
     text-align: center !important;
   }
 
+  /* Columnas numéricas centradas: Sec.(2ª col visible), Plano(3ª), Tiempo(4ª) */
   .table-container tbody tr td:nth-child(2),
   .table-container tbody tr td:nth-child(3),
   .table-container tbody tr td:nth-child(4) {
@@ -998,7 +1020,7 @@ tr.drag-over-bottom td {
 
   .dur-cell {
     color: #000 !important;
-    font-size: 6.2pt !important;
+    font-size: 7pt !important;
     font-weight: 600 !important;
     text-align: center !important;
     padding: 1mm 0.3mm !important;
@@ -1006,26 +1028,23 @@ tr.drag-over-bottom td {
   }
 
   .row-num {
-    color: #333 !important;
-    font-size: 6.2pt !important;
-    font-weight: 700 !important;
-    text-align: center !important;
-    padding: 1mm 0.3mm !important;
+    display: none !important;
   }
 
-  /* Reparto proporcional de columnas para A4 apaisado (total 100%) */
-  .col-num { width: 2.5% !important; min-width: 0 !important; }
-  .col-seq { width: 4.5% !important; min-width: 0 !important; }
-  .col-shot { width: 4.5% !important; min-width: 0 !important; }
-  .col-time { width: 5% !important; min-width: 0 !important; }
-  .col-desc { width: 15% !important; min-width: 0 !important; }
-  .col-encuadre { width: 9% !important; min-width: 0 !important; }
-  .col-angulacion { width: 7% !important; min-width: 0 !important; }
-  .col-movimiento { width: 7.5% !important; min-width: 0 !important; }
-  .col-text { width: 8% !important; min-width: 0 !important; }
-  .col-efecto { width: 9% !important; min-width: 0 !important; }
-  .col-transicion { width: 8.5% !important; min-width: 0 !important; }
-  .col-dur { width: 4.5% !important; min-width: 0 !important; }
+  /* Reparto proporcional de columnas para A4 apaisado (total 100%)
+     Columna # oculta → espacio redistribuido a Descripción y Diálogo */
+  .col-num  { display: none !important; }
+  .col-seq  { width: 5% !important;  min-width: 0 !important; }
+  .col-shot { width: 5% !important;  min-width: 0 !important; }
+  .col-time { width: 5% !important;  min-width: 0 !important; }
+  .col-desc { width: 18% !important; min-width: 0 !important; }
+  .col-encuadre  { width: 9% !important;  min-width: 0 !important; }
+  .col-angulacion{ width: 7% !important;  min-width: 0 !important; }
+  .col-movimiento{ width: 7.5% !important;min-width: 0 !important; }
+  .col-text      { width: 8% !important;  min-width: 0 !important; }
+  .col-efecto    { width: 9% !important;  min-width: 0 !important; }
+  .col-transicion{ width: 8.5% !important;min-width: 0 !important; }
+  .col-dur       { width: 5% !important;  min-width: 0 !important; }
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -2187,6 +2206,25 @@ document.addEventListener('keydown', function(e) {
 // Auto-resize textareas on window resize
 window.addEventListener('resize', function() {
   document.querySelectorAll('#shots-body textarea').forEach(autoResize);
+});
+
+/* ═══════════════════════════════════════════════════════
+   PRINT — inyectar título y fecha en atributos @page
+   ═══════════════════════════════════════════════════════ */
+window.addEventListener('beforeprint', function() {
+  const titulo = document.getElementById('titulo').value.trim() ||
+                 (currentLang === 'eu' ? 'Gidoi Teknikoa' : 'Guión Técnico');
+  const now = new Date();
+  const fecha = now.toLocaleDateString(currentLang === 'eu' ? 'eu-ES' : 'es-ES', {
+    day: '2-digit', month: 'short', year: 'numeric'
+  });
+  document.documentElement.setAttribute('data-print-title', titulo);
+  document.documentElement.setAttribute('data-print-date', fecha);
+});
+
+window.addEventListener('afterprint', function() {
+  document.documentElement.removeAttribute('data-print-title');
+  document.documentElement.removeAttribute('data-print-date');
 });
 
 /* ═══════════════════════════════════════════════════════
