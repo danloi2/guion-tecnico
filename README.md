@@ -5,7 +5,9 @@
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![Modern CSS](https://img.shields.io/badge/CSS-Modern%20(L4+)-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
-![License](https://img.shields.io/badge/Licencia-MIT-green?style=for-the-badge)
+![Versión](https://img.shields.io/badge/versión-v1.0.0-blue?style=for-the-badge)
+[![ORCID](https://img.shields.io/badge/ORCID-0000--0003--3842--7694-A6CE39?style=for-the-badge&logo=orcid&logoColor=white)](https://orcid.org/0000-0003-3842-7694)
+[![Licencia](https://img.shields.io/badge/Licencia-CC_BY--SA_4.0-orange?style=for-the-badge)](https://creativecommons.org/licenses/by-sa/4.0/)
 
 **Aplicación web autocontenida para crear, editar e imprimir guiones técnicos audiovisuales.**
 
@@ -67,6 +69,7 @@ guion-tecnico/
 │   └── ejemplo-guion-tecnico.json # 📄 Datos de ejemplo importables
 ├── README.md            # 📖 Este archivo
 ├── AGENTS.md            # 🤖 Instrucciones para agentes IA
+├── LICENSE              # ⚖️ Licencia Creative Commons CC BY-SA 4.0
 └── .gitignore           # 🚫 Archivos excluidos del repositorio
 ```
 
@@ -188,15 +191,25 @@ Corte (Cut) · Fundido a negro · Fundido desde negro · Fundido encadenado (Dis
 
 ---
 
+## 👤 Autoría
+
+Creado por **Daniel Losada**
+- 🆔 **ORCID**: [0000-0003-3842-7694](https://orcid.org/0000-0003-3842-7694)
+- 🐙 **GitHub**: [@danloi2 / guion-tecnico](https://github.com/danloi2/guion-tecnico)
+
+---
+
 ## ⚖️ Licencia
 
-Este proyecto está bajo la licencia [MIT](LICENSE).
+Este proyecto se distribuye bajo la licencia **[Creative Commons Reconocimiento-CompartirIgual 4.0 Internacional (CC BY-SA 4.0)](https://creativecommons.org/licenses/by-sa/4.0/deed.es)**.
+
+Eres libre de compartir y adaptar el material, siempre que reconozcas la autoría original y mantengas la misma licencia. Consulta el archivo [LICENSE](LICENSE) para más detalles.
 
 ---
 
 <div align="center">
 
-Hecho con ❤️ para la educación audiovisual
+Hecho con ❤️ para la educación audiovisual · **Daniel Losada**
 
 **🎬 ¡Luces, cámara, guión técnico!**
 

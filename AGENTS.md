@@ -125,4 +125,5 @@ Al no haber framework de testing, verificar manualmente:
 | `examples/ejemplo-guion-tecnico.json` | Datos de ejemplo importables extraídos del Excel | ✅ |
 | `README.md` | Documentación del proyecto | ✅ |
 | `AGENTS.md` | Este fichero — instrucciones para agentes IA | ✅ |
+| `LICENSE` | Licencia Creative Commons CC BY-SA 4.0 | ✅ |
 | `.gitignore` | Exclusiones del repositorio | ✅ |
