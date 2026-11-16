@@ -59,6 +59,7 @@ index.html    ← ÚNICO fichero de código
 - **Auto-guardado**: Cada cambio en cualquier campo dispara un guardado con debounce de 800ms en `localStorage` bajo la clave `guion-tecnico-data`.
 - **Exportación**: Serializa el estado completo a JSON y lo descarga como fichero.
 - **Importación**: Lee un fichero JSON y restaura el estado completo.
+- **Ejemplo integrado**: Carga los datos de `EXAMPLE_DATA[currentLang]` directamente sin requerir descargas ni peticiones de red.
 
 ## Directrices para modificaciones
 
@@ -113,10 +114,11 @@ Al no haber framework de testing, verificar manualmente:
 4. **Recargar página** → los datos deben persistir.
 5. **Exportar JSON** → debe descargar un fichero `.json` válido.
 6. **Importar JSON** → debe restaurar todos los datos.
-7. **Imprimir** (`Ctrl+P`) → debe mostrar una tabla limpia en A4 apaisado sin botones ni controles.
-8. **Vaciar todo** → debe pedir confirmación y borrar todos los datos.
-9. **Panel de referencia** → debe abrirse/cerrarse y mostrar contenido en las 6 pestañas.
-10. **Responsive** → verificar en viewport de 768px y menos.
+7. **Cargar ejemplo** → debe cargar el guión de 38 planos en el idioma activo (ES o EU).
+8. **Imprimir** (`Ctrl+P`) → debe mostrar una tabla limpia en A4 apaisado sin botones ni controles.
+9. **Vaciar todo** → debe pedir confirmación y borrar todos los datos.
+10. **Panel de referencia** → debe abrirse/cerrarse y mostrar contenido en las 6 pestañas.
+11. **Responsive** → verificar en viewport de 768px y menos.
 
 ## Ficheros del repositorio
 
