@@ -963,6 +963,39 @@ tr.drag-over-bottom td {
     box-shadow: none !important;
   }
 
+  .table-container input[type="number"] {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    text-align: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+    -moz-appearance: textfield !important;
+  }
+
+  .table-container input[type="number"]::-webkit-inner-spin-button,
+  .table-container input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none !important;
+    display: none !important;
+    margin: 0 !important;
+  }
+
+  .table-container thead th.col-seq,
+  .table-container thead th.col-shot,
+  .table-container thead th.col-time,
+  .table-container thead th.col-num,
+  .table-container thead th.col-dur {
+    text-align: center !important;
+  }
+
+  .table-container tbody tr td:nth-child(2),
+  .table-container tbody tr td:nth-child(3),
+  .table-container tbody tr td:nth-child(4) {
+    text-align: center !important;
+    padding: 1mm 0.2mm !important;
+  }
+
   .dur-cell {
     color: #000 !important;
     font-size: 6.2pt !important;
@@ -982,16 +1015,16 @@ tr.drag-over-bottom td {
 
   /* Reparto proporcional de columnas para A4 apaisado (total 100%) */
   .col-num { width: 2.5% !important; min-width: 0 !important; }
-  .col-seq { width: 3.5% !important; min-width: 0 !important; }
-  .col-shot { width: 3.5% !important; min-width: 0 !important; }
-  .col-time { width: 4.5% !important; min-width: 0 !important; }
-  .col-desc { width: 17% !important; min-width: 0 !important; }
+  .col-seq { width: 4.5% !important; min-width: 0 !important; }
+  .col-shot { width: 4.5% !important; min-width: 0 !important; }
+  .col-time { width: 5% !important; min-width: 0 !important; }
+  .col-desc { width: 15% !important; min-width: 0 !important; }
   .col-encuadre { width: 9% !important; min-width: 0 !important; }
   .col-angulacion { width: 7% !important; min-width: 0 !important; }
   .col-movimiento { width: 7.5% !important; min-width: 0 !important; }
-  .col-text { width: 9% !important; min-width: 0 !important; }
-  .col-efecto { width: 9.5% !important; min-width: 0 !important; }
-  .col-transicion { width: 9% !important; min-width: 0 !important; }
+  .col-text { width: 8% !important; min-width: 0 !important; }
+  .col-efecto { width: 9% !important; min-width: 0 !important; }
+  .col-transicion { width: 8.5% !important; min-width: 0 !important; }
   .col-dur { width: 4.5% !important; min-width: 0 !important; }
 }
 
